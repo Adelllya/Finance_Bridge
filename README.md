@@ -19,7 +19,7 @@
 
 <br/>
 
-[🌐 Демо-сайт](https://adelllya.github.io/Finance_Bridge/) · [📋 Структура](#-структура-проекта) · [🚀 Запуск](#-быстрый-старт)
+[🌐 Демо-сайт](https://finance-bridge.vercel.app/) · [📋 Структура](#-структура-проекта) · [🚀 Запуск](#-быстрый-старт)
 
 </div>
 
@@ -68,9 +68,7 @@ Finance_Bridge/
 │   └── utils/
 │       └── 🛠️ cn.ts             # Утилита classnames (clsx + tailwind-merge)
 │
-└── .github/
-    └── workflows/
-        └── 🚀 deploy.yml        # CI/CD: авто-деплой на GitHub Pages
+└── 📄 vercel.json               # Деплой на Vercel (авто)
 ```
 
 ## 🚀 Быстрый старт
@@ -94,7 +92,7 @@ npm install
 npm run dev
 ```
 
-Откройте [http://localhost:5173/Finance_Bridge/](http://localhost:5173/Finance_Bridge/) в браузере.
+Откройте [http://localhost:5173](http://localhost:5173) в браузере.
 
 ### Сборка для продакшена
 

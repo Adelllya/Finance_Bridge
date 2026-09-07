@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Unbounded", "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  /* Акцентный «денежный» зелёный */
+  --color-brand-50: #edfbf3;
+  --color-brand-100: #d5f5e3;
+  --color-brand-200: #adeacb;
+  --color-brand-300: #77d9ab;
+  --color-brand-400: #3ec385;
+  --color-brand-500: #15b06d;
+  --color-brand-600: #0ba360;
+  --color-brand-700: #078a52;
+  --color-brand-800: #096e44;
+  --color-brand-900: #085a39;
+  --color-brand-950: #02331f;
+
+  /* Тёмно-зелёные «чернила» для футера и тёмных блоков */
+  --color-ink-950: #06120c;
+  --color-ink-900: #0b1f16;
+  --color-ink-800: #122e22;
+  --color-ink-700: #1a4232;
+
+  --color-paper: #f4f7f5;
+
+  --shadow-card: 0 1px 2px rgb(6 18 12 / 0.04), 0 10px 30px -12px rgb(6 18 12 / 0.12);
+  --shadow-pop: 0 2px 6px rgb(6 18 12 / 0.06), 0 24px 50px -16px rgb(6 18 12 / 0.25);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-brand-200);
+  color: var(--color-brand-950);
+}
+
+/* Скрыть скроллбар, но оставить прокрутку */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Тонкий аккуратный скроллбар внутри «телефона» */
+.device-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(11 163 96 / 0.35) transparent;
+}
+.device-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.device-scroll::-webkit-scrollbar-thumb {
+  background: rgb(11 163 96 / 0.35);
+  border-radius: 999px;
+}
+
+/* Мягкая пульсация кнопки WhatsApp */
+@keyframes wa-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgb(37 211 102 / 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgb(37 211 102 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(37 211 102 / 0);
+  }
+}
+.wa-pulse {
+  animation: wa-ping 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Тонкая сетка для тёмных фонов */
+.bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.bg-grid-light {
+  background-image:
+    linear-gradient(to right, rgb(6 18 12 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(6 18 12 / 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+}

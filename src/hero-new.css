@@ -547,6 +547,54 @@ h1.english-heading .hero-headline-item {
   flex-shrink: 0;
 }
 
+.nameplate-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 11px 20px;
+  background: rgba(229, 184, 105, 0.12);
+  border: 1px solid rgba(229, 184, 105, 0.45);
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e5b869;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.nameplate-link:hover {
+  background: linear-gradient(135deg, #e5b869 0%, #d4af37 100%);
+  color: #0b1329;
+  border-color: #e5b869;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(229, 184, 105, 0.35);
+}
+
+.nameplate-link svg {
+  width: 15px;
+  height: 15px;
+  color: currentColor;
+  transition: transform 0.2s ease;
+}
+
+.nameplate-link:hover svg {
+  transform: translateX(3px);
+  color: #0b1329;
+}
+
+a.stat-card {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.stat-card:hover {
+  border-color: rgba(229, 184, 105, 0.7);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(229, 184, 105, 0.18);
+  transform: translateY(-4px);
+}
+
 .nameplate-whatsapp {
   display: flex;
   align-items: center;

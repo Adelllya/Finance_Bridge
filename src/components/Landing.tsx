@@ -160,14 +160,14 @@ export default function Landing() {
               </div>
 
               <div className="hero-actions-block">
-                <a className="hero-btn hero-btn-primary" href="#consultation">
+                <a className="hero-btn hero-btn-primary" href="#services">
                   <span className="btn-bg" />
-                  <WaIcon />
-                  <span>{t.consult}</span>
+                  <Sparkles style={{ width: 18, height: 18 }} />
+                  <span>{t.more}</span>
                   <ArrowDown />
                 </a>
-                <a className="hero-btn hero-btn-ghost" href="#services">
-                  <span>{t.more}</span>
+                <a className="hero-btn hero-btn-ghost" href="#consultation">
+                  <span>{t.calculate}</span>
                   <ArrowDown />
                 </a>
               </div>
@@ -214,14 +214,14 @@ export default function Landing() {
                     </div>
                   </div>
 
-                  <div className="stat-card stat-card-2">
+                  <a className="stat-card stat-card-2" href="#services">
                     <div className="stat-card-inner">
                       <div className="stat-icon">
                         <Globe2 />
                       </div>
                       <div className="stat-text">ВЭД и нерезиденты</div>
                     </div>
-                  </div>
+                  </a>
 
                   <div className="expert-nameplate">
                     <div className="nameplate-inner">
@@ -231,9 +231,9 @@ export default function Landing() {
                         <Check />
                         <span>100+ проектов без нареканий</span>
                       </div>
-                      <a className="nameplate-whatsapp" href="#consultation">
-                        <WaIcon />
-                        <span>Написать в WhatsApp</span>
+                      <a className="nameplate-link" href="#expert">
+                        <span>{language === "en" ? "About expert & cases" : "Опыт и кейсы эксперта"}</span>
+                        <ArrowRight style={{ width: 14, height: 14 }} />
                       </a>
                     </div>
                   </div>
@@ -431,9 +431,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 7. Gold Divider: FAQ (Alabaster) -> Consultation Hub (Navy) */}
-      <GoldDivider />
-
       <section id="consultation" className="consultation-section" tabIndex={-1}>
         <ReviewsMarquee />
 
@@ -476,17 +473,16 @@ export default function Landing() {
                   </div>
                   <div className="consult-pill">
                     <ShieldCheck style={{ width: 14, height: 14, color: "#e5b869" }} />
-                    <span>Без спама и лишних услуг</span>
+                    <span>Без спама</span>
                   </div>
                   <div className="consult-pill">
                     <Sparkles style={{ width: 14, height: 14, color: "#e5b869" }} />
-                    <span>Бесплатный экспресс-разбор</span>
+                    <span>Бесплатный разбор</span>
                   </div>
                 </div>
               </div>
 
               <div className="contact-links">
-                <p className="response-note">{t.contacts.response}</p>
                 <a className="contact-social" href={igUrl()} target="_blank" rel="noopener noreferrer">
                   <IgIcon />
                   <span>{t.contacts.instagram}<small>@gulshat_121985</small></span>
@@ -499,6 +495,8 @@ export default function Landing() {
                 </a>
               </div>
             </div>
+
+            <div className="contacts-vertical-divider" aria-hidden="true" />
 
             <div className="quote-builder">
               <span className="task-selector-label">{t.contacts.taskSelectorLabel}</span>
@@ -550,14 +548,10 @@ export default function Landing() {
                 <ArrowRight />
               </a>
 
-              <ol className="quote-steps">
-                {t.contacts.steps.map((step, i) => (
-                  <li key={step}>
-                    <span aria-hidden="true">{i + 1}</span>
-                    {step}
-                  </li>
-                ))}
-              </ol>
+              <p className="quote-guarantee">
+                <span>⚡ {language === "en" ? "Reply within 15 minutes" : "Ответ за 15 минут в рабочее время"}</span>
+                <small> · {language === "en" ? "Direct contact with chief accountant" : "Без спама и навязанных услуг"}</small>
+              </p>
             </div>
           </div>
 

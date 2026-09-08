@@ -122,9 +122,9 @@ const ru = {
   },
   contacts: {
     label: "Начнём с вашей задачи", title: "Давайте посчитаем вашу бухгалтерию",
-    text: "Узнайте точную стоимость сопровождения и получите экспертные рекомендации по вашему учёту уже сегодня.",
+    text: "Экспресс-расчёт тарифа за 15 минут и консультация по налогам.",
     expertTitle: "Главный бухгалтер и налоговый консультант",
-    expertQuote: "«Напишите мне напрямую — я лично изучу вашу ситуацию, рассчитаю стоимость и подскажу, как законно защититься от налоговых рисков и штрафов»",
+    expertQuote: "«Лично изучу вашу ситуацию и подскажу, как законно снизить налоги»",
     onlineBadge: "В сети · Экспресс-расчёт за 15 мин",
     taskSelectorLabel: "1. Выберите вашу задачу:",
     tasks: [
@@ -134,7 +134,7 @@ const ru = {
       { id: "ip", label: "ИП и налоги", message: "Хочу узнать стоимость сопровождения ИП, сдачи отчётности и расчёта налогов/зарплат." },
       { id: "custom", label: "Другая задача", message: "У меня индивидуальный вопрос по бухгалтерскому и налоговому учёту в Казахстане." },
     ],
-    previewLabel: "Готовое сообщение в WhatsApp. Отправьте его в один клик:",
+    previewLabel: "Текст заявки в WhatsApp:",
     greeting: "Здравствуйте, Гульшат!", introduction: "Меня зовут",
     quoteMessage: "Хочу узнать стоимость бухгалтерии для моей компании (ТОО/ИП).",
     nameLabel: "2. Ваше имя", optional: "(необязательно)", namePlaceholder: "Например, Айгерим",
@@ -251,9 +251,9 @@ const en: typeof ru = {
   },
   contacts: {
     label: "Let’s start with your business", title: "Let’s work out your accounting costs",
-    text: "Get a clear cost calculation and expert recommendations for your business accounting today.",
+    text: "Fast quote within 15 mins and expert tax consultation.",
     expertTitle: "Chief Accountant & Tax Consultant",
-    expertQuote: "“Message me directly on WhatsApp — I will personally review your setup, calculate the quote and advise how to safeguard against tax penalties.”",
+    expertQuote: "“I will personally review your accounts and advise on tax savings.”",
     onlineBadge: "Online · Fast quote within 15 mins",
     taskSelectorLabel: "1. Select your inquiry:",
     tasks: [
@@ -263,7 +263,7 @@ const en: typeof ru = {
       { id: "ip", label: "Sole Trader & Payroll", message: "I'd like a quote for sole trader accounting, payroll and tax filing." },
       { id: "custom", label: "Custom Inquiry", message: "I have a custom accounting and tax consultation inquiry." },
     ],
-    previewLabel: "Your WhatsApp message is ready. Send it with one click:",
+    previewLabel: "WhatsApp message text:",
     greeting: "Hello, Gulshat!", introduction: "My name is",
     quoteMessage: "I'd like an accounting quote for my business (LLP/sole trader).",
     nameLabel: "2. Your name", optional: "(optional)", namePlaceholder: "For example, Alex",

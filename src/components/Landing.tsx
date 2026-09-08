@@ -1,565 +1,573 @@
 import { useState } from "react";
-import { BadgeCheck, Check, ChevronDown, Phone, Quote, RefreshCcw } from "lucide-react";
-import {
-  FAQS,
-  FACTS,
-  HEROES,
-  IMG,
-  MSG_HERO,
-  PAINS,
-  PHONE_DISPLAY,
-  PLANS,
-  SERVICES,
-  STATS,
-  STEPS,
-  msgFinal,
-  msgPlan,
-  waUrl,
-} from "../data/content";
-import { ScreenNo, WaIcon } from "./ui";
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Globe2, Pause, Phone, Play, ShieldCheck, Sparkles } from "lucide-react";
+import { BRAND, PHONE_DISPLAY, igUrl, msgPlan, phoneUrl, waUrl } from "../data/content";
+import { useLanguage } from "../i18n";
+import { BridgeMark, ChatWidget, GoldDivider, IgIcon, WaIcon } from "./ui";
+import gulshatPhoto from "../assets/gulshat-new.png";
+import gulshatPortrait from "../assets/gulshat_portrait.png";
+import avatarViktor from "../assets/avatar_viktor.jpg";
+import avatarDaniyar from "../assets/avatar_daniyar.jpg";
+import avatarElena from "../assets/avatar_elena.jpg";
+import avatarMurat from "../assets/avatar_murat.jpg";
 
-/* ───────────────────────── статус-бар телефона ───────────────────────── */
-function StatusBar() {
-  return (
-    <div className="hidden h-11 shrink-0 select-none items-end justify-between px-7 pb-1.5 text-ink-900 lg:flex">
-      <span className="text-[13px] font-bold">9:41</span>
-      <span className="flex items-center gap-1.5 pb-[3px]">
-        <svg className="h-[11px] w-[17px]" viewBox="0 0 18 12" fill="currentColor">
-          <rect x="0" y="7" width="3" height="5" rx="1" />
-          <rect x="5" y="5" width="3" height="7" rx="1" />
-          <rect x="10" y="2.5" width="3" height="9.5" rx="1" />
-          <rect x="15" y="0" width="3" height="12" rx="1" opacity="0.35" />
-        </svg>
-        <svg className="h-[12px] w-[24px]" viewBox="0 0 26 12" fill="none">
-          <rect x="0.5" y="0.5" width="21" height="11" rx="3" stroke="currentColor" opacity="0.4" />
-          <rect x="2" y="2" width="16" height="8" rx="1.6" fill="currentColor" />
-          <path d="M23.5 3.5v5a2.5 2.5 0 0 0 0-5Z" fill="currentColor" opacity="0.5" />
-        </svg>
-      </span>
-    </div>
-  );
-}
+const clientAvatars = [avatarViktor, avatarDaniyar, avatarElena, avatarMurat];
 
-/* ───────────────────────── переключатель вариантов hero ───────────────────────── */
-function VariantSwitcher({ idx, setIdx }: { idx: number; setIdx: (i: number) => void }) {
+function SpecialtiesMarquee() {
+  const { t } = useLanguage();
+  const [paused, setPaused] = useState(false);
   return (
-    <div className="mb-4 hidden flex-col items-center gap-2 lg:flex">
-      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/40">
-        превью · 3 варианта оффера первого экрана
-      </p>
-      <div className="flex items-center gap-1 rounded-2xl border border-white/10 bg-white/5 p-1 backdrop-blur">
-        {HEROES.map((h, i) => (
-          <button
-            key={h.id}
-            type="button"
-            onClick={() => setIdx(i)}
-            className={
-              "cursor-pointer rounded-xl px-4 py-2 text-[13px] font-bold transition " +
-              (i === idx
-                ? "bg-brand-600 text-white shadow-lg shadow-brand-600/30"
-                : "text-white/60 hover:text-white")
-            }
-          >
-            {h.id} · {h.label}
-          </button>
-        ))}
+    <div className="specialties">
+      <div className="container specialties-heading">
+        <p>{t.sectors.label}</p>
+        <button
+          type="button"
+          className="icon-button ticker-toggle"
+          aria-label={paused ? t.sectors.play : t.sectors.pause}
+          aria-pressed={paused}
+          onClick={() => setPaused(!paused)}
+        >
+          {paused ? <Play /> : <Pause />}
+        </button>
       </div>
-      <p className="text-[11px] text-white/35">{HEROES[idx].formula}</p>
+      <div className="marquee-window">
+        <div className={`marquee-track${paused ? " is-paused" : ""}`}>
+          {[0, 1].map((copy) => (
+            <div key={copy} className="marquee-group" aria-hidden={copy === 1 ? true : undefined}>
+              {t.sectors.items.map((item) => (
+                <span key={item}>
+                  <span className="marquee-star" aria-hidden="true">✳</span>
+                  {item}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ───────────────────────── главный компонент лендинга ───────────────────────── */
-export default function Landing() {
-  const [heroIdx, setHeroIdx] = useState(0);
-  const [openFaq, setOpenFaq] = useState(0);
-  const [name, setName] = useState("");
-  const hero = HEROES[heroIdx];
+function ReviewsMarquee() {
+  const { t } = useLanguage();
+  const [paused, setPaused] = useState(false);
+  return (
+    <section className="reviews-section" aria-labelledby="reviews-heading">
+      <div className="container reviews-heading-row">
+        <div>
+          <p className="eyebrow">{t.reviews.label}</p>
+          <h2 id="reviews-heading">{t.reviews.title}</h2>
+        </div>
+        <button
+          type="button"
+          className="icon-button ticker-toggle"
+          aria-label={paused ? t.sectors.play : t.sectors.pause}
+          aria-pressed={paused}
+          onClick={() => setPaused(!paused)}
+        >
+          {paused ? <Play /> : <Pause />}
+        </button>
+      </div>
 
-  const finalMsg = msgFinal(name.trim());
+      <div className="reviews-marquee-window">
+        <div className={`reviews-marquee-track${paused ? " is-paused" : ""}`}>
+          {[0, 1].map((copy) => (
+            <div key={copy} className="reviews-marquee-group" aria-hidden={copy === 1 ? true : undefined}>
+              {t.reviews.items.map((item, idx) => (
+                <article key={`${copy}-${idx}`} className="review-card">
+                  <div className="review-header">
+                    <img
+                      src={clientAvatars[idx % clientAvatars.length]}
+                      alt={item.author}
+                      className="review-avatar"
+                      width="52"
+                      height="52"
+                      loading="eager"
+                    />
+                    <div className="review-header-info">
+                      <div className="review-stars">
+                        {"★".repeat(item.rating)}
+                      </div>
+                      <span className="review-company">{item.company}</span>
+                      <span className="review-verified">
+                        <Check style={{ width: 12, height: 12 }} />
+                        Проверенный клиент
+                      </span>
+                    </div>
+                  </div>
+                  <p className="review-text">"{item.text}"</p>
+                  <div className="review-meta">
+                    <span className="review-author">{item.author}</span>
+                    <span className="review-industry">{item.industry}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function Landing() {
+  const { t, language } = useLanguage();
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [name, setName] = useState("");
+  const [selectedTaskIndex, setSelectedTaskIndex] = useState(0);
+
+  const activeTask = t.contacts.tasks[selectedTaskIndex] || t.contacts.tasks[0];
+  const namePart = name.trim() ? `${t.contacts.introduction} ${name.trim()}.` : "";
+  const quoteMessage = [t.contacts.greeting, namePart, activeTask.message].filter(Boolean).join(" ");
 
   return (
-    <div className="bg-grid-dark relative flex min-h-[calc(100dvh-3rem)] w-full flex-col items-center overflow-x-hidden bg-ink-950 lg:min-h-[calc(100dvh-4rem)] lg:pb-10">
-      {/* декоративные свечения */}
-      <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-brand-600/25 blur-[110px]" />
-      <div className="pointer-events-none absolute bottom-0 right-[8%] h-64 w-64 rounded-full bg-emerald-400/10 blur-[100px]" />
+    <>
+      <section id="top" className="hero" aria-labelledby="hero-title">
+        <div className="hero-grain" aria-hidden="true" />
+        <div className="hero-spotlight hero-spotlight-1" aria-hidden="true" />
+        <div className="hero-spotlight hero-spotlight-2" aria-hidden="true" />
+        <div className="hero-lines" aria-hidden="true">
+          <div className="line line-1" />
+          <div className="line line-2" />
+          <div className="line line-3" />
+        </div>
 
-      <VariantSwitcher idx={heroIdx} setIdx={setHeroIdx} />
-
-      {/* ─────────── корпус «телефона» ─────────── */}
-      <div className="relative mx-auto flex h-[calc(100dvh-3rem)] w-full max-w-[430px] flex-col overflow-hidden bg-white shadow-2xl lg:h-[min(800px,calc(100dvh-225px))] lg:max-w-[400px] lg:rounded-[2.75rem] lg:border-[10px] lg:border-ink-900 lg:shadow-[0_50px_140px_-30px_rgb(0_0_0/0.7)]">
-        <StatusBar />
-
-        {/* прокручивающийся экран */}
-        <div className="device-scroll relative flex-1 overflow-y-auto overscroll-contain">
-          {/* ═══ ЭКРАН 01 · HERO ═══ */}
-          <header className="bg-white px-5 pb-7 pt-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600 shadow-md shadow-brand-600/25">
-                  <span className="font-display text-[15px] font-bold text-white">Б</span>
-                </div>
-                <div>
-                  <p className="text-[13px] font-extrabold leading-none text-ink-900">Гульшат Аджибаева</p>
-                  <p className="mt-1 text-[10.5px] font-semibold text-ink-900/45">главный бухгалтер · Казахстан</p>
-                </div>
+        <div className="container">
+          <div className="hero-layout">
+            <div className="hero-left">
+              <div className="hero-status">
+                <span className="status-indicator" />
+                <span className="status-text">Работаем онлайн · Казахстан</span>
               </div>
-              <span className="flex items-center gap-1.5 rounded-full border border-brand-600/20 bg-brand-50 px-2.5 py-1.5 text-[10.5px] font-bold text-brand-700">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-500" />
-                приём заявок
-              </span>
-            </div>
 
-            <div key={hero.id} className="rise-in mt-6">
-              <ScreenNo no="01" name="hero" />
-              <h1 className="mt-3 font-display text-[26px] font-semibold leading-[1.28] tracking-[-0.01em] text-ink-900">
-                {hero.lines[0]}
-                <br />
-                <span className="text-brand-700">{hero.lines[1]}</span>
+              <h1 id="hero-title" className={language === "en" ? "english-heading" : undefined}>
+                <span className="hero-headline-item">{t.hero.lines[0]}</span>
+                <span className="hero-headline-item">{t.hero.lines[1]}</span>
+                <span className="hero-headline-item hero-headline-accent">{t.hero.lines[2]}</span>
               </h1>
-              <p className="mt-3.5 text-[15px] leading-relaxed text-ink-900/65">{hero.sub}</p>
-            </div>
 
-            {/* доверие: фото + имя */}
-            <div className="mt-5 flex items-center gap-3 rounded-2xl border border-ink-900/5 bg-paper p-3">
-              <img
-                src={IMG.portrait}
-                alt="Гульшат Аджибаева"
-                className="h-12 w-12 rounded-xl object-cover object-top ring-2 ring-brand-200"
-              />
-              <div className="min-w-0">
-                <p className="flex items-center gap-1 text-[13px] font-extrabold text-ink-900">
-                  Гульшат Аджибаева
-                  <BadgeCheck className="h-4 w-4 shrink-0 text-brand-600" />
+              <div className="hero-lead-block">
+                <p className="hero-lead-text">
+                  {t.hero.text}
                 </p>
-                <p className="text-[11.5px] font-medium text-ink-900/55">
-                  15+ лет опыта · команда помощников · личная проверка отчётов
+                <p className="hero-lead-emphasis">
+                  {t.hero.ending}
                 </p>
               </div>
-            </div>
 
-            <a
-              href={waUrl(MSG_HERO)}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 flex h-14 w-full items-center justify-center gap-2.5 rounded-2xl bg-[#25D366] text-[16px] font-extrabold text-white shadow-lg shadow-[#25D366]/35 transition hover:bg-[#1fb959] active:scale-[0.98]"
-            >
-              <WaIcon className="h-5 w-5" />
-              Получить консультацию в WhatsApp
-            </a>
-            <p className="mt-2 text-center text-[11.5px] font-semibold text-ink-900/45">
-              Бесплатно · ответ за 10 минут · без спама
-            </p>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {hero.chips.map((c) => (
-                <span
-                  key={c}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/8 bg-white px-3 py-1.5 text-[12px] font-bold text-ink-900/70"
-                >
-                  <Check className="h-3.5 w-3.5 text-brand-600" />
-                  {c}
-                </span>
-              ))}
-            </div>
-          </header>
-
-          {/* ═══ ЭКРАН 02 · БОЛИ ═══ */}
-          <section className="bg-paper px-5 py-8">
-            <ScreenNo no="02" name="боли" />
-            <h2 className="mt-3 text-[23px] font-extrabold leading-[1.2] tracking-tight text-ink-900">
-              Узнаёте себя?
-            </h2>
-            <p className="mt-2 text-[13.5px] leading-relaxed text-ink-900/60">
-              Ситуации, из-за которых владельцы бизнеса в Казахстане теряют деньги и сон.
-            </p>
-            <div className="mt-4 space-y-2.5">
-              {PAINS.map((p) => {
-                const Ic = p.icon;
-                return (
-                  <div key={p.text} className="flex items-start gap-3 rounded-2xl bg-white p-3.5 shadow-card">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600/10 text-brand-700">
-                      <Ic className="h-5 w-5" />
-                    </span>
-                    <p className="pt-1 text-[14px] font-semibold leading-snug text-ink-900/85">{p.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-5 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-4 text-white shadow-lg shadow-brand-700/25">
-              <p className="text-[14.5px] font-extrabold leading-snug">
-                Слишком знакомо? Пора передать бухгалтерию тем, кто отвечает за сроки.
-              </p>
-              <a
-                href={waUrl(MSG_HERO)}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3.5 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white text-[14.5px] font-extrabold text-brand-800 transition active:scale-[0.98]"
-              >
-                <WaIcon className="h-4.5 w-4.5 text-[#25D366]" />
-                Разобрать мою ситуацию бесплатно
-              </a>
-              <p className="mt-2 text-center text-[11px] font-semibold text-white/80">
-                ответим за 10 минут · без навязчивых звонков
-              </p>
-            </div>
-          </section>
-
-          {/* ═══ ЭКРАН 03 · О СПЕЦИАЛИСТЕ ═══ */}
-          <section className="bg-white px-5 py-8">
-            <ScreenNo no="03" name="о специалисте" />
-            <h2 className="mt-3 text-[23px] font-extrabold leading-[1.2] tracking-tight text-ink-900">
-              Ваш главный бухгалтер отвечает за результат лично
-            </h2>
-
-            <div className="relative mt-4 overflow-hidden rounded-3xl">
-              <img src={IMG.portrait} alt="Гульшат Аджибаева, главный бухгалтер" className="aspect-[4/5] w-full object-cover object-top" />
-              <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink-950/80 to-transparent" />
-              <div className="absolute inset-x-3 bottom-3 flex items-center gap-3 rounded-2xl bg-white/95 p-3 backdrop-blur">
-                <div>
-                  <p className="text-[14px] font-extrabold text-ink-900">Гульшат Аджибаева</p>
-                  <p className="text-[11.5px] font-medium text-ink-900/55">главный бухгалтер · Алматы, РК</p>
-                </div>
-                <span className="ml-auto flex items-center gap-1 rounded-full bg-brand-600/10 px-2.5 py-1 text-[11px] font-bold text-brand-700">
-                  <BadgeCheck className="h-3.5 w-3.5" />
-                  15+ лет
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-3.5 grid grid-cols-2 gap-2.5">
-              {FACTS.map((f) => {
-                const Ic = f.icon;
-                return (
-                  <div key={f.title} className="rounded-2xl bg-paper p-3.5">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600/10 text-brand-700">
-                      <Ic className="h-4.5 w-4.5" />
-                    </span>
-                    <p className="mt-2.5 text-[13.5px] font-extrabold leading-none text-ink-900">{f.title}</p>
-                    <p className="mt-1.5 text-[11.5px] leading-snug text-ink-900/60">{f.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-
-            <figure className="mt-3.5 rounded-2xl border border-brand-600/15 bg-brand-50 p-4">
-              <Quote className="h-4 w-4 text-brand-600" />
-              <blockquote className="mt-2 text-[14px] font-medium leading-relaxed text-ink-900/85">
-                Моя задача — чтобы вы не думали о налогах и спали спокойно. За отчёты и риски отвечаю я.
-              </blockquote>
-            </figure>
-
-            <div className="mt-4 grid grid-cols-3 divide-x divide-white/10 rounded-3xl bg-ink-900 py-4 text-center">
-              {STATS.map((s) => (
-                <div key={s.label} className="px-1">
-                  <p className="font-display text-[21px] font-semibold text-brand-400">{s.value}</p>
-                  <p className="mx-auto mt-1 max-w-[86px] text-[10px] font-semibold leading-tight text-white/55">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ═══ ЭКРАН 04 · УСЛУГИ ═══ */}
-          <section className="bg-paper px-5 py-8">
-            <ScreenNo no="04" name="услуги" />
-            <h2 className="mt-3 text-[23px] font-extrabold leading-[1.2] tracking-tight text-ink-900">
-              Что входит в сопровождение
-            </h2>
-            <p className="mt-2 text-[13.5px] leading-relaxed text-ink-900/60">
-              Полный контур бухгалтерии — от первички до ответов налоговой. Ничего лишнего, всё по делу.
-            </p>
-            <div className="mt-4 grid grid-cols-2 gap-2.5">
-              {SERVICES.map((s) => {
-                const Ic = s.icon;
-                return (
-                  <div key={s.title} className="rounded-2xl bg-white p-3.5 shadow-card">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-600/10 text-brand-700">
-                      <Ic className="h-[18px] w-[18px]" />
-                    </span>
-                    <p className="mt-2.5 text-[13px] font-extrabold leading-tight text-ink-900">{s.title}</p>
-                    <p className="mt-1 text-[11.5px] leading-snug text-ink-900/55">{s.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-4 flex items-start gap-2.5 rounded-2xl border border-brand-600/20 bg-brand-600/8 p-3.5">
-              <RefreshCcw className="mt-0.5 h-4.5 w-4.5 shrink-0 text-brand-700" />
-              <p className="text-[12.5px] font-bold leading-snug text-ink-900">
-                Переход от другого бухгалтера — за 2 дня, без простоя и потери базы.
-              </p>
-            </div>
-          </section>
-
-          {/* ═══ ЭКРАН 05 · КАК РАБОТАЕМ ═══ */}
-          <section className="bg-white px-5 py-8">
-            <ScreenNo no="05" name="как работаем" />
-            <h2 className="mt-3 text-[23px] font-extrabold leading-[1.2] tracking-tight text-ink-900">
-              3 шага до спокойной бухгалтерии
-            </h2>
-            <div className="mt-5">
-              {STEPS.map((s, i) => {
-                const Ic = s.icon;
-                const last = i === STEPS.length - 1;
-                return (
-                  <div key={s.title} className="flex gap-3.5">
-                    <div className="flex flex-col items-center">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-ink-900 font-display text-[11px] font-semibold text-white">
-                        0{i + 1}
-                      </span>
-                      {!last && <span className="mt-1 w-px flex-1 bg-ink-900/10" />}
-                    </div>
-                    <div className={last ? "pb-1" : "pb-6"}>
-                      <div className="flex items-center gap-2 pt-1">
-                        <p className="text-[15px] font-extrabold text-ink-900">{s.title}</p>
-                        <span className="ml-auto rounded-full bg-paper px-2.5 py-1 text-[10.5px] font-bold text-ink-900/55">
-                          {s.time}
-                        </span>
-                      </div>
-                      <p className="mt-1.5 text-[13px] leading-relaxed text-ink-900/60">{s.text}</p>
-                      <Ic className="mt-2 h-4.5 w-4.5 text-brand-600" />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-4 flex flex-wrap items-center gap-2 rounded-2xl bg-paper p-3.5">
-              {["Договор", "Фиксированная цена", "Отчётность по графику"].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[12px] font-bold text-ink-900/75 shadow-sm"
-                >
-                  <Check className="h-3.5 w-3.5 text-brand-600" />
-                  {t}
-                </span>
-              ))}
-            </div>
-          </section>
-
-          {/* ═══ ЭКРАН 06 · ТАРИФЫ ═══ */}
-          <section className="bg-paper px-5 py-8">
-            <ScreenNo no="06" name="тарифы" />
-            <h2 className="mt-3 text-[23px] font-extrabold leading-[1.2] tracking-tight text-ink-900">
-              Прозрачные тарифы
-            </h2>
-            <p className="mt-2 text-[13.5px] leading-relaxed text-ink-900/60">
-              Цена зависит от режима и количества операций. После аудита фиксируем её в договоре.
-            </p>
-            <div className="mt-6 space-y-4">
-              {PLANS.map((p) => (
-                <div
-                  key={p.name}
-                  className={
-                    "relative rounded-3xl bg-white p-5 shadow-card " +
-                    (p.popular ? "border-2 border-brand-600" : "border border-ink-900/6")
-                  }
-                >
-                  {p.popular && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-600 px-3 py-1 text-[10.5px] font-bold text-white shadow-md">
-                      выбирают чаще всего
-                    </span>
-                  )}
-                  <p className="text-[17px] font-extrabold text-ink-900">{p.name}</p>
-                  <p className="mt-0.5 text-[11.5px] font-semibold text-ink-900/50">{p.audience}</p>
-                  <p className="mt-3 flex items-baseline gap-1.5">
-                    <span className="font-display text-[25px] font-semibold tracking-tight text-ink-900">
-                      {p.price}
-                    </span>
-                    <span className="text-[12px] font-bold text-ink-900/45">/мес</span>
-                  </p>
-                  <ul className="mt-3.5 space-y-2">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-[13px] font-medium text-ink-900/75">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <a
-                    href={waUrl(msgPlan(p.name))}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={
-                      "mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14.5px] font-extrabold transition active:scale-[0.98] " +
-                      (p.popular
-                        ? "bg-brand-600 text-white shadow-lg shadow-brand-600/30 hover:bg-brand-700"
-                        : "border border-brand-600/40 bg-brand-600/5 text-brand-700 hover:bg-brand-600/10")
-                    }
-                  >
-                    <WaIcon className="h-4 w-4" />
-                    {p.name === "ВЭД и МСФО" ? "Обсудить задачу" : "Выбрать тариф"}
-                  </a>
-                </div>
-              ))}
-            </div>
-            <p className="mt-4 text-center text-[11.5px] font-semibold text-ink-900/45">
-              Точную цену называем после бесплатного аудита. Без скрытых доплат.
-            </p>
-          </section>
-
-          {/* ═══ ЭКРАН 07 · FAQ ═══ */}
-          <section className="bg-white px-5 py-8">
-            <ScreenNo no="07" name="вопросы" />
-            <h2 className="mt-3 text-[23px] font-extrabold leading-[1.2] tracking-tight text-ink-900">
-              Вопросы, которые задают до старта
-            </h2>
-            <div className="mt-4 space-y-2.5">
-              {FAQS.map((f, i) => {
-                const open = openFaq === i;
-                return (
-                  <div
-                    key={f.q}
-                    className={"overflow-hidden rounded-2xl border bg-paper transition " + (open ? "border-brand-600/40" : "border-ink-900/6")}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(open ? -1 : i)}
-                      className="flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3.5 text-left"
-                    >
-                      <span className="text-[13.5px] font-bold leading-snug text-ink-900">{f.q}</span>
-                      <span
-                        className={
-                          "flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition " +
-                          (open ? "rotate-180 bg-brand-600 text-white" : "bg-ink-900/8 text-ink-900/60")
-                        }
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                      </span>
-                    </button>
-                    {open && (
-                      <p className="animate-[rise-in_0.3s_ease] px-4 pb-4 text-[13px] leading-relaxed text-ink-900/65">
-                        {f.a}
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-brand-600/15 bg-brand-50 px-4 py-3.5">
-              <p className="text-[13px] font-extrabold leading-tight text-brand-900">
-                Не нашли свой вопрос?
-                <span className="block text-[11px] font-semibold text-brand-800/60">напишите — ответим за 10 минут</span>
-              </p>
-              <a
-                href={waUrl(MSG_HERO)}
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-10 shrink-0 items-center gap-1.5 rounded-xl bg-brand-600 px-3.5 text-[13px] font-extrabold text-white shadow-md shadow-brand-600/25"
-              >
-                <WaIcon className="h-4 w-4" />
-                в WhatsApp
-              </a>
-            </div>
-          </section>
-
-          {/* ═══ ЭКРАН 08 · ФИНАЛ + ФОРМА ═══ */}
-          <section className="relative overflow-hidden bg-ink-900 px-5 pb-24 pt-9">
-            <img src={IMG.office} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover opacity-[0.13]" />
-            <div className="absolute inset-0 bg-gradient-to-b from-ink-900 via-ink-900/80 to-ink-950/95" />
-            <div className="relative">
-              <div className="inline-flex items-center gap-2">
-                <span className="flex h-6 min-w-6 items-center justify-center rounded-lg bg-white/10 px-1.5 font-display text-[9px] font-semibold tracking-wide text-white">
-                  08
-                </span>
-                <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-white/45">финал · заявка</span>
-              </div>
-              <h2 className="mt-3 text-[24px] font-extrabold leading-[1.18] tracking-tight text-white">
-                Давайте посчитаем вашу бухгалтерию
-              </h2>
-              <p className="mt-2.5 text-[13.5px] leading-relaxed text-white/60">
-                За 10 минут поймёте, сколько стоит спокойствие и что нужно поправить в учёте уже сейчас.
-              </p>
-
-              <div className="mt-6">
-                <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.1em] text-white/45">
-                  готовое сообщение — вы отправите его в один клик
-                </p>
-                <div className="flex w-fit max-w-full flex-col rounded-3xl rounded-br-md bg-[#25D366]/90 px-4 py-3 shadow-lg shadow-black/20">
-                  <span className="flex items-center gap-1.5 text-[10px] font-bold text-white/80">
-                    <WaIcon className="h-3 w-3" /> WhatsApp
-                  </span>
-                  <p className="mt-1.5 text-[13px] font-medium leading-relaxed text-white">{finalMsg}</p>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <label htmlFor="lead-name" className="mb-1.5 block text-[12px] font-bold text-white/60">
-                  ваше имя <span className="font-semibold text-white/35">(необязательно)</span>
-                </label>
-                <input
-                  id="lead-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Например, Айгерим"
-                  className="h-12 w-full rounded-xl border border-white/15 bg-white/10 px-4 text-[15px] font-medium text-white outline-none transition placeholder:text-white/35 focus:border-brand-400 focus:bg-white/15"
-                />
-              </div>
-
-              <a
-                href={waUrl(finalMsg)}
-                target="_blank"
-                rel="noreferrer"
-                className="wa-pulse mt-3 flex h-14 w-full items-center justify-center gap-2.5 rounded-2xl bg-[#25D366] text-[16px] font-extrabold text-white shadow-xl shadow-[#25D366]/25 transition hover:bg-[#1fb959] active:scale-[0.98]"
-              >
-                <WaIcon className="h-5 w-5" />
-                Получить расчёт в WhatsApp
-              </a>
-
-              <div className="mt-4 grid grid-cols-3 gap-2">
-                {["нажимаете кнопку", "открывается WhatsApp", "отправляете сообщение"].map((t, i) => (
-                  <div key={t} className="rounded-xl border border-white/10 bg-white/5 px-2 py-2.5 text-center">
-                    <p className="font-display text-[11px] font-semibold text-brand-400">{i + 1}</p>
-                    <p className="mt-1 text-[10px] font-semibold leading-tight text-white/60">{t}</p>
-                  </div>
-                ))}
-              </div>
-
-              <p className="mt-4 text-center text-[11px] font-semibold text-white/40">
-                Бесплатно · отвечаем в рабочее время 9:00–19:00 (Алматы)
-              </p>
-              <p className="mt-2 flex items-center justify-center gap-1.5 text-center text-[11.5px] text-white/55">
-                <Phone className="h-3.5 w-3.5" />
-                <a href="tel:+77001234567" className="font-bold underline decoration-white/25 underline-offset-2">
-                  {PHONE_DISPLAY}
+              <div className="hero-actions-block">
+                <a className="hero-btn hero-btn-primary" href="#consultation">
+                  <span className="btn-bg" />
+                  <WaIcon />
+                  <span>{t.consult}</span>
+                  <ArrowDown />
                 </a>
-              </p>
-
-              <footer className="mt-8 border-t border-white/10 pt-4 text-center">
-                <p className="text-[11px] font-semibold text-white/45">
-                  © 2026 · Гульшат Аджибаева · частный главный бухгалтер
-                </p>
-                <p className="mt-1 text-[10px] text-white/30">
-                  Алматы · вся Республика Казахстан — онлайн. Прототип: фото и цены — демо.
-                </p>
-              </footer>
-            </div>
-          </section>
-
-          {/* липкая CTA-панель внизу экрана */}
-          <div className="sticky bottom-0 z-30 border-t border-ink-900/5 bg-white/92 px-4 py-2.5 backdrop-blur-md">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0">
-                <p className="truncate text-[12.5px] font-extrabold text-ink-900">Сколько стоит сопровождение?</p>
-                <p className="text-[10.5px] font-semibold text-ink-900/50">бесплатный расчёт · ответ за 10 минут</p>
+                <a className="hero-btn hero-btn-ghost" href="#services">
+                  <span>{t.more}</span>
+                  <ArrowDown />
+                </a>
               </div>
-              <a
-                href={waUrl(MSG_HERO)}
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-11 shrink-0 items-center gap-2 rounded-xl bg-[#25D366] px-4 text-[14px] font-extrabold text-white shadow-lg shadow-[#25D366]/30 transition hover:bg-[#1fb959] active:scale-95"
-              >
-                <WaIcon className="h-4.5 w-4.5" />
-                WhatsApp
-              </a>
+
+              <div className="hero-trust-line">
+                <div className="trust-mark">
+                  <Check />
+                  <span>15 минут</span>
+                </div>
+                <div className="trust-divider" />
+                <div className="trust-mark">
+                  <Check />
+                  <span>Прямой контакт</span>
+                </div>
+                <div className="trust-divider" />
+                <div className="trust-mark">
+                  <Check />
+                  <span>Без NDA</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="hero-right">
+              <div className="hero-visual-frame">
+                <div className="frame-border frame-border-tl" />
+                <div className="frame-border frame-border-tr" />
+                <div className="frame-border frame-border-bl" />
+                <div className="frame-border frame-border-br" />
+
+                <div className="visual-content">
+                  <img
+                    className="hero-image"
+                    src={gulshatPhoto}
+                    alt={t.hero.photoAlt}
+                    width="642"
+                    height="1050"
+                    fetchPriority="high"
+                  />
+
+                  <div className="stat-card stat-card-1">
+                    <div className="stat-card-inner">
+                      <div className="stat-number">15+</div>
+                      <div className="stat-label">лет опыта</div>
+                    </div>
+                  </div>
+
+                  <div className="stat-card stat-card-2">
+                    <div className="stat-card-inner">
+                      <div className="stat-icon">
+                        <Globe2 />
+                      </div>
+                      <div className="stat-text">ВЭД и нерезиденты</div>
+                    </div>
+                  </div>
+
+                  <div className="expert-nameplate">
+                    <div className="nameplate-inner">
+                      <div className="nameplate-title">{t.hero.name}</div>
+                      <div className="nameplate-subtitle">{t.hero.role}</div>
+                      <div className="nameplate-proof">
+                        <Check />
+                        <span>100+ проектов без нареканий</span>
+                      </div>
+                      <a className="nameplate-whatsapp" href="#consultation">
+                        <WaIcon />
+                        <span>Написать в WhatsApp</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <p className="mt-4 hidden text-center text-[11.5px] font-semibold text-white/30 lg:block">
-        все тексты, промпт и разметка для сборки — во вкладке «Промпт и тексты»
-      </p>
-    </div>
+      {/* 1. Gold Divider: Hero (Navy) -> Cases (Alabaster) */}
+      <GoldDivider />
+
+      <section id="cases" className="section outcomes-section" tabIndex={-1}>
+        <div className="container">
+          <div className="section-heading compact-heading">
+            <p className="eyebrow">{t.outcomes.label}</p>
+            <h2>{t.outcomes.title}</h2>
+          </div>
+          <div className="outcomes-grid">
+            {t.outcomes.items.map(({ icon: Icon, title, text }) => (
+              <article className="outcome" key={title}>
+                <span className="outline-icon"><Icon /></span>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Gold Divider: Cases (Alabaster) -> Services (Platinum) */}
+      <GoldDivider />
+
+      <section id="services" className="section services-section" tabIndex={-1}>
+        <div className="container">
+          <div className="section-heading split-heading">
+            <div>
+              <p className="eyebrow">{t.services.label}</p>
+              <h2>{t.services.title}</h2>
+            </div>
+            <p className="section-intro">{t.services.intro}</p>
+          </div>
+          <div className="services-grid">
+            {t.services.items.map(({ icon: Icon, title, subtitle, features }) => (
+              <article className="service-card" key={title}>
+                <div className="service-card-top">
+                  <span className="outline-icon"><Icon /></span>
+                  <ArrowUpRight className="decorative-arrow" aria-hidden="true" />
+                </div>
+                <h3>{title}</h3>
+                <p>{subtitle}</p>
+                <ul>
+                  {features.map((feature) => (
+                    <li key={feature}>
+                      <Check aria-hidden="true" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+          <div className="situation-banner">
+            <div>
+              <h3>{t.services.problem}</h3>
+              <p>{t.services.solution}</p>
+            </div>
+            <a className="button button-outline" href="#consultation">
+              {t.services.action}
+              <ArrowDown />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Gold Divider: Services (Platinum) -> Specialties strip (Navy) */}
+      <GoldDivider />
+
+      <SpecialtiesMarquee />
+
+      {/* 4. Gold Divider: Specialties strip (Navy) -> Expert (Alabaster) */}
+      <GoldDivider />
+
+      <section id="expert" className="section expert-section" tabIndex={-1}>
+        <div className="container expert-grid">
+          <div className="expert-story">
+            <p className="eyebrow">{t.expert.label}</p>
+            <h2>{t.expert.title}</h2>
+            <p className="expert-text">{t.expert.text}</p>
+            <div className="expert-signature">
+              <span className="avatar">
+                <img src={gulshatPortrait} alt={t.expert.signature} width="84" height="84" loading="eager" />
+              </span>
+              <div>
+                <strong>{t.expert.signature}</strong>
+                <span>{t.expert.role}</span>
+              </div>
+            </div>
+          </div>
+          <div className="expert-facts">
+            {t.expert.facts.map((fact) => (
+              <div key={fact.title}>
+                <span className="fact-check"><Check aria-hidden="true" /></span>
+                <div>
+                  <h3>{fact.title}</h3>
+                  <p>{fact.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Gold Divider: Expert (Alabaster) -> Pricing (Platinum) */}
+      <GoldDivider />
+
+      <section id="pricing" className="section pricing-section" tabIndex={-1}>
+        <div className="container">
+          <div className="section-heading split-heading">
+            <div>
+              <p className="eyebrow">{t.pricing.label}</p>
+              <h2>{t.pricing.title}</h2>
+            </div>
+            <p className="section-intro">{t.pricing.text}</p>
+          </div>
+          <div className="pricing-grid">
+            {t.pricing.items.map(({ icon: Icon, name: planName, audience, featured, features }) => (
+              <article className={`plan-card${featured ? " featured-plan" : ""}`} key={planName}>
+                <div className="plan-top">
+                  <Icon aria-hidden="true" />
+                  {featured && <span>{t.pricing.focus}</span>}
+                </div>
+                <h3>{planName}</h3>
+                <p className="plan-audience">{audience}</p>
+                <p className="plan-price">{t.pricing.tailored}</p>
+                <ul>
+                  {features.map((feature) => (
+                    <li key={feature}>
+                      <Check aria-hidden="true" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  className={`button ${featured ? "button-accent" : "button-outline"}`}
+                  href={waUrl(msgPlan(planName, language))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t.calculate}
+                  <ArrowUpRight />
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Gold Divider: Pricing (Platinum) -> FAQ (Alabaster) */}
+      <GoldDivider />
+
+      <section className="section faq-section">
+        <div className="container faq-grid">
+          <div className="section-heading">
+            <p className="eyebrow">{t.faq.label}</p>
+            <h2>{t.faq.title}</h2>
+          </div>
+          <div className="faq-list">
+            {t.faq.items.map(({ q, a }, i) => (
+              <div className="faq-item" key={i}>
+                <h3>
+                  <button
+                    type="button"
+                    aria-expanded={openFaq === i}
+                    aria-controls={`faq-answer-${i}`}
+                    id={`faq-question-${i}`}
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  >
+                    {q}
+                    <ChevronDown aria-hidden="true" />
+                  </button>
+                </h3>
+                <div
+                  id={`faq-answer-${i}`}
+                  role="region"
+                  aria-labelledby={`faq-question-${i}`}
+                  hidden={openFaq !== i}
+                >
+                  <p>{a}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Gold Divider: FAQ (Alabaster) -> Consultation Hub (Navy) */}
+      <GoldDivider />
+
+      <section id="consultation" className="consultation-section" tabIndex={-1}>
+        <ReviewsMarquee />
+
+        <div id="contacts" className="contacts-section">
+          <div className="container contacts-grid">
+            <div className="contact-intro">
+              <p className="eyebrow">{t.contacts.label}</p>
+              <h2>{t.contacts.title}</h2>
+              <p className="contact-description">{t.contacts.text}</p>
+
+              {/* Expert Profile Card with Gulshat */}
+              <div className="expert-consult-card">
+                <div className="expert-consult-avatar-wrap">
+                  <img
+                    src={gulshatPortrait}
+                    alt={t.hero.name}
+                    className="expert-consult-avatar"
+                    width="80"
+                    height="80"
+                    loading="eager"
+                  />
+                  <div className="live-status-badge">
+                    <span className="live-dot" />
+                    <span>{t.contacts.onlineBadge}</span>
+                  </div>
+                </div>
+                <div className="expert-consult-info">
+                  <h3>{t.hero.name}</h3>
+                  <p className="expert-consult-role">{t.contacts.expertTitle}</p>
+                  <p className="expert-consult-quote">{t.contacts.expertQuote}</p>
+                </div>
+              </div>
+
+              <div className="consult-trust-pills">
+                <div className="consult-pill">
+                  <Check />
+                  <span>15 мин на ответ</span>
+                </div>
+                <div className="consult-pill">
+                  <ShieldCheck style={{ width: 14, height: 14, color: "#e5b869" }} />
+                  <span>Без спама и лишних услуг</span>
+                </div>
+                <div className="consult-pill">
+                  <Sparkles style={{ width: 14, height: 14, color: "#e5b869" }} />
+                  <span>Бесплатный экспресс-разбор</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="quote-builder">
+              <span className="task-selector-label">{t.contacts.taskSelectorLabel}</span>
+              <div className="task-chips-grid">
+                {t.contacts.tasks.map((task, idx) => (
+                  <button
+                    key={task.id}
+                    type="button"
+                    className={`task-chip${selectedTaskIndex === idx ? " is-active" : ""}`}
+                    onClick={() => setSelectedTaskIndex(idx)}
+                  >
+                    {selectedTaskIndex === idx && <Check className="task-chip-check" />}
+                    <span>{task.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <label className="quote-name-label" htmlFor="quote-name">
+                {t.contacts.nameLabel} <span>{t.contacts.optional}</span>
+              </label>
+              <input
+                id="quote-name"
+                className="quote-name"
+                type="text"
+                autoComplete="name"
+                maxLength={80}
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                placeholder={t.contacts.namePlaceholder}
+              />
+
+              <p className="quote-preview-label">{t.contacts.previewLabel}</p>
+              <div className="quote-preview">
+                <span>
+                  <WaIcon />
+                  WhatsApp · Прямой диалог
+                </span>
+                <p>{quoteMessage}</p>
+              </div>
+
+              <a
+                className="button quote-action"
+                href={waUrl(quoteMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <WaIcon />
+                <span>{t.contacts.quoteAction}</span>
+                <ArrowRight />
+              </a>
+
+              <ol className="quote-steps">
+                {t.contacts.steps.map((step, i) => (
+                  <li key={step}>
+                    <span aria-hidden="true">{i + 1}</span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="contact-links">
+              <p className="response-note">{t.contacts.response}</p>
+              <a className="contact-social" href={igUrl()} target="_blank" rel="noopener noreferrer">
+                <IgIcon />
+                <span>{t.contacts.instagram}<small>@gulshat_121985</small></span>
+                <ArrowUpRight />
+              </a>
+              <a className="contact-social" href={phoneUrl}>
+                <Phone />
+                <span>{PHONE_DISPLAY}<small>{t.contacts.call}</small></span>
+                <ArrowUpRight />
+              </a>
+            </div>
+          </div>
+
+          <footer className="container site-footer">
+            <a className="brand footer-brand" href="#top">
+              <BridgeMark />
+              <strong>{BRAND}</strong>
+            </a>
+            <p>{t.contacts.location}</p>
+            <a className="text-link" href="#top">
+              {t.contacts.top}
+              <ArrowRight className="back-top-arrow" />
+            </a>
+          </footer>
+        </div>
+      </section>
+
+      <ChatWidget avatarSrc={gulshatPortrait} />
+    </>
   );
 }

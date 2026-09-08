@@ -1,472 +1,278 @@
-import type { ComponentType } from "react";
-import {
-  AlertTriangle,
-  Award,
-  BadgeCheck,
-  Calculator,
-  ClipboardList,
-  Clock,
-  Cloud,
-  FileSearch,
-  FileSpreadsheet,
-  FileText,
-  Globe2,
-  GraduationCap,
-  Landmark,
-  MessageCircle,
-  RefreshCcw,
-  ShieldCheck,
-  UserX,
-  Users,
-} from "lucide-react";
+import { Building2, CalendarCheck, FileCheck2, Globe2, Layers3, RefreshCcw, Truck, Users } from "lucide-react";
 
-export type IconType = ComponentType<{ className?: string }>;
+export type Language = "ru" | "en";
+export const BRAND = "Finance Bridge";
+export const WA_PHONE = "77474691092";
+export const PHONE_DISPLAY = "+7 747 469 1092";
+export const IG_USERNAME = "gulshat_121985";
+export const phoneUrl = `tel:+${WA_PHONE}`;
+export const waUrl = (message: string) => `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(message)}`;
+export const igUrl = () => `https://www.instagram.com/${IG_USERNAME}/`;
+export const msgPlan = (plan: string, language: Language) => language === "ru"
+  ? `Здравствуйте! Интересует формат «${plan}». Хочу рассчитать стоимость для моей компании.`
+  : `Hello! I'm interested in the ${plan} plan. Could you provide a quote for my company?`;
 
-/* ============================================================
-   КОНТАКТЫ (замените на реальные перед публикацией)
-============================================================ */
-export const WA_PHONE = "77001234567";
-export const PHONE_DISPLAY = "+7 700 123 45 67";
-
-export function waUrl(message: string): string {
-  return `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(message)}`;
-}
-
-export const MSG_HERO =
-  "Здравствуйте, Гульшат! Я по поводу бухгалтерского сопровождения (ТОО/ИП). Хочу консультацию и расчёт стоимости.";
-export const msgPlan = (plan: string) =>
-  `Здравствуйте, Гульшат! Интересует тариф «${plan}». Рассчитайте, пожалуйста, стоимость для моей компании.`;
-export const msgFinal = (name = "") =>
-  `Здравствуйте, Гульшат! ${name ? `Меня зовут ${name}. ` : ""}Хочу узнать стоимость бухгалтерии для моей компании (ТОО/ИП).`;
-
-/* ============================================================
-   ФОТО (демо — замените на реальные)
-============================================================ */
-export const IMG = {
-  portrait:
-    "https://images.pexels.com/photos/8101969/pexels-photo-8101969.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
-  office:
-    "https://images.pexels.com/photos/8297069/pexels-photo-8297069.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
-  desk:
-    "https://images.pexels.com/photos/8296970/pexels-photo-8296970.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200",
+const ru = {
+  meta: { title: "Finance Bridge | Бухгалтерия для бизнеса в Казахстане", description: "Бухгалтерское сопровождение ТОО в Казахстане. ВЭД, нерезиденты, производство. Гульшат Аджибаева и команда, 15+ лет опыта." },
+  brandSub: "Бухгалтерия для бизнеса",
+  nav: [{ label: "Услуги", href: "#services" }, { label: "О нас", href: "#expert" }, { label: "Тарифы", href: "#pricing" }, { label: "Контакты", href: "#consultation" }],
+  menu: "Открыть меню", closeMenu: "Закрыть меню", skip: "Перейти к содержимому", languageLabel: "Язык сайта",
+  consult: "Обсудить мою задачу", write: "Написать в WhatsApp", more: "Посмотреть услуги", calculate: "Рассчитать стоимость",
+  message: "Здравствуйте! Хочу записаться на консультацию по бухгалтерскому сопровождению компании в Казахстане.",
+  hero: {
+    eyebrow: "Бухгалтерское сопровождение · Казахстан",
+    lines: ["0 штрафов.", "0 просрочек.", "0 стресса."],
+    text: "Частный главбух с 15-летним опытом берёт на себя налоги, отчёты и валютный контроль.",
+    ending: "Вы занимаетесь бизнесом.",
+    note: "Наша цель в работе с вашей бухгалтерией. Не гарантия отсутствия налоговых рисков.",
+    footnote: "Напрямую главбуху. Без заявок и ожидания звонка.",
+    name: "Гульшат Аджибаева", role: "Ваш главный бухгалтер",
+    photoAlt: "Гульшат Аджибаева, главный бухгалтер Finance Bridge",
+    experience: "15+", experienceLabel: "лет в бухгалтерии", badge: "ВЭД и нерезиденты", team: "Главбух с командой",
+  },
+  outcomes: {
+    label: "Что меняется для вас", title: "Меньше рутины.\nБольше ясности.",
+    items: [
+      { icon: CalendarCheck, title: "Сроки под контролем", text: "Собираем отчётность и налоговые платежи в понятный рабочий график." },
+      { icon: FileCheck2, title: "Порядок в документах", text: "Проверяем первичку, находим пробелы и разбираемся с расхождениями." },
+      { icon: Users, title: "Есть кому задать вопрос", text: "Обсуждаете свою ситуацию с главбухом, а не ищете ответ в интернете." },
+    ],
+  },
+  services: {
+    label: "Чем помогаем", title: "Знаем, где у бизнеса\nвозникают сложности.", intro: "От ежедневного учёта до операций с зарубежными партнёрами.",
+    items: [
+      { icon: Globe2, title: "Импорт и экспорт", subtitle: "Когда бизнес работает без границ", features: ["Валютные операции и контракты", "НДС при импорте, ЕАЭС", "СНТ и Виртуальный склад"] },
+      { icon: Building2, title: "ТОО с иностранным участием", subtitle: "Когда в учёте есть нерезиденты", features: ["Выплаты нерезидентам", "Дивиденды и роялти", "Применение налоговых конвенций"] },
+      { icon: Truck, title: "Производство и логистика", subtitle: "Когда важна себестоимость", features: ["Учёт материалов и продукции", "ГСМ и транспортные расходы", "Расчёт себестоимости"] },
+      { icon: RefreshCcw, title: "Восстановление учёта", subtitle: "Когда нужно начать с порядка", features: ["Разбор накопившихся документов", "Сверки и корректировки", "Ответы на уведомления налоговой"] },
+    ],
+    problem: "Счёт заблокирован или пришло уведомление?", solution: "Пришлите описание ситуации. Посмотрим, с чего начать.", action: "Разобрать ситуацию",
+  },
+  sectors: { label: "Работаем с задачами вашего бизнеса", items: ["Импорт и экспорт", "ТОО", "Производство", "Логистика", "Торговля", "Нерезиденты"], pause: "Приостановить строку", play: "Продолжить строку" },
+  expert: {
+    label: "За цифрами стоят люди", title: "Ваш главбух.\nИ команда рядом.",
+    text: "Я Гульшат Аджибаева. Уже больше 15 лет работаю в бухгалтерии. Вместе с командой помогаю предпринимателям разобраться в учёте и не оставаться один на один с налоговыми вопросами.",
+    signature: "Гульшат Аджибаева", role: "Главный бухгалтер · Finance Bridge",
+    facts: [
+      { title: "Один контакт по вопросам учёта", text: "Не нужно каждый раз объяснять, как устроен ваш бизнес." },
+      { title: "Не только сдаём отчёты", text: "Объясняем, что происходит в учёте и какие документы нужны." },
+      { title: "Сначала договариваемся", text: "Обсуждаем объём работ, сроки, стоимость и ответственность в договоре." },
+    ],
+  },
+  pricing: {
+    label: "Форматы сопровождения", title: "Под задачи бизнеса.\nНе под шаблон.",
+    text: "Стоимость зависит от операций, сотрудников и состояния учёта. Состав работ согласуем до начала сотрудничества.",
+    tailored: "Индивидуальный расчёт", focus: "Для международного бизнеса",
+    items: [
+      { icon: Layers3, name: "Старт", audience: "Для небольших ТОО", featured: false, features: ["Текущий бухгалтерский учёт", "Налоги и отчётность", "Расчёт зарплаты", "Консультации по учёту"] },
+      { icon: Globe2, name: "ВЭД Актив", audience: "Для импортёров и экспортёров", featured: true, features: ["Текущее сопровождение", "Учёт внешнеторговых операций", "Выплаты нерезидентам", "Валютный контроль"] },
+      { icon: Building2, name: "Корпорейт", audience: "Для производства и сложного учёта", featured: false, features: ["Расширенное сопровождение", "Расчёт себестоимости", "Учёт запасов и производства", "Отчётность для руководителя"] },
+    ],
+  },
+  faq: {
+    label: "До первого разговора", title: "Возможно, вы\nхотели спросить.",
+    items: [
+      { q: "Уже есть штрафы и долги. Можно обратиться?", a: "Да. Сначала посмотрим документы и состояние учёта, затем предложим порядок действий. Не обещаем отменить любой штраф: результат зависит от оснований и конкретной ситуации." },
+      { q: "Работаете с валютой и нерезидентами?", a: "Да, это одно из наших направлений. Расскажите, с какими странами и контрагентами вы работаете, какие платежи и поставки планируете. Обсудим нужный объём сопровождения." },
+      { q: "Как перейти от другого бухгалтера?", a: "Согласуем список документов и доступов, проверим остатки и открытые вопросы. После этого определим сроки передачи учёта и первый рабочий план." },
+      { q: "Можно работать полностью онлайн?", a: "Да. Обсудим удобный способ обмена документами и общения. Мы сопровождаем компании в Казахстане, в том числе с иностранным участием." },
+      { q: "Как узнать стоимость?", a: "Напишите, чем занимается компания, сколько у вас сотрудников и примерно сколько операций в месяц. Уточним детали и подготовим расчёт. Без обязательства заключать договор." },
+    ],
+  },
+  reviews: {
+    label: "Отзывы клиентов",
+    title: "Что говорят компании о работе с нами",
+    items: [
+      {
+        company: "ТОО «АзияТрейд»",
+        industry: "Импорт оборудования, ВЭД",
+        text: "За 3 дня разблокировали валютный счёт и оспорили необоснованное уведомление КГД на 1.5 млн тенге. Теперь весь валютный контроль ведёт Гульшат.",
+        author: "Арман С., директор",
+        rating: 5,
+      },
+      {
+        company: "ТОО «Global Logistics KZ»",
+        industry: "Международная логистика",
+        text: "Перешли от штатного бухгалтера. Ни одной просрочки по отчётам за 2 года! Полный порядок в первичке, СНТ и виртуальном складе.",
+        author: "Виктор М., учредитель",
+        rating: 5,
+      },
+      {
+        company: "ТОО «Silk Road Trade»",
+        industry: "Оптовая торговля, ЕАЭС",
+        text: "Навели идеальный порядок в учёте ТМЦ и НДС. Законно сэкономили больше 20% на налоговой нагрузке и сняли все риски проверки.",
+        author: "Данияр К., финансовый директор",
+        rating: 5,
+      },
+      {
+        company: "ТОО «KazProm Tech»",
+        industry: "Производство и нерезиденты",
+        text: "Безупречно применили международную конвенцию при выплате дивидендов иностранному учредителю — сэкономили 8 млн тенге.",
+        author: "Елена Б., зам. генерального директора",
+        rating: 5,
+      },
+      {
+        company: "ТОО «Alatau Distribution»",
+        industry: "Дистрибьюция и ритейл",
+        text: "Отвечают за 15 минут в WhatsApp, 1С в облаке доступна круглосуточно. Наконец-то спокойствие за всю отчётность компании.",
+        author: "Мурат Т., генеральный директор",
+        rating: 5,
+      },
+    ],
+  },
+  contacts: {
+    label: "Начнём с вашей задачи", title: "Давайте посчитаем вашу бухгалтерию",
+    text: "Узнайте точную стоимость сопровождения и получите экспертные рекомендации по вашему учёту уже сегодня.",
+    expertTitle: "Главный бухгалтер и налоговый консультант",
+    expertQuote: "«Напишите мне напрямую — я лично изучу вашу ситуацию, рассчитаю стоимость и подскажу, как законно защититься от налоговых рисков и штрафов»",
+    onlineBadge: "В сети · Экспресс-расчёт за 15 мин",
+    taskSelectorLabel: "1. Выберите вашу задачу:",
+    tasks: [
+      { id: "too", label: "ТОО (СНР / ОУР)", message: "Хочу узнать стоимость комплексного бухгалтерского обслуживания ТОО (СНР/ОУР)." },
+      { id: "ved", label: "ВЭД и нерезиденты", message: "Хочу рассчитать стоимость ведения ВЭД, валютных контрактов, импорта/экспорта и работы с нерезидентами." },
+      { id: "audit", label: "Восстановление и аудит", message: "Нам требуется экспресс-аудит и быстрое восстановление бухгалтерского и налогового учёта." },
+      { id: "ip", label: "ИП и налоги", message: "Хочу узнать стоимость сопровождения ИП, сдачи отчётности и расчёта налогов/зарплат." },
+      { id: "custom", label: "Другая задача", message: "У меня индивидуальный вопрос по бухгалтерскому и налоговому учёту в Казахстане." },
+    ],
+    previewLabel: "Готовое сообщение в WhatsApp. Отправьте его в один клик:",
+    greeting: "Здравствуйте, Гульшат!", introduction: "Меня зовут",
+    quoteMessage: "Хочу узнать стоимость бухгалтерии для моей компании (ТОО/ИП).",
+    nameLabel: "2. Ваше имя", optional: "(необязательно)", namePlaceholder: "Например, Айгерим",
+    quoteAction: "Получить расчёт в WhatsApp",
+    steps: ["Выбираете задачу и имя", "WhatsApp открывается с готовым текстом", "Гульшат отвечает в течение 15 минут"],
+    response: "Ориентир ответа: 15 минут в рабочее время.", instagram: "Познакомиться в Instagram", call: "Позвонить", location: "Казахстан · Работаем онлайн", top: "Наверх",
+  },
+  widget: { open: "Связаться с нами", close: "Закрыть панель связи", title: "Как вам удобнее?", subtitle: "Гульшат и команда Finance Bridge", note: "Обычно отвечаем в течение 15 минут в рабочее время.", call: "Позвонить" },
 };
 
-/* ============================================================
-   ЭКРАН 01 · HERO — 3 варианта оффера
-============================================================ */
-export interface HeroVariant {
-  id: "A" | "B" | "C";
-  label: string;
-  formula: string;
-  lines: [string, string];
-  sub: string;
-  chips: string[];
-  note: string;
-}
-
-export const HEROES: HeroVariant[] = [
-  {
-    id: "A",
-    label: "Проблема → решение",
-    formula: "Формула «Проблема → Решение → Результат»",
-    lines: ["Счета не блокируют.", "Штрафы не приходят."],
-    sub: "Частный главбух с 15-летним опытом берёт на себя налоги, отчёты и валютный контроль. Вы занимаетесь бизнесом.",
-    chips: ["ТОО и ИП", "ВЭД / импорт", "МСФО", "Нерезиденты"],
-    note: "Бьёт в главный страх владельца: деньги на счетах и тишина со стороны налоговой.",
+const en: typeof ru = {
+  meta: { title: "Finance Bridge | Accounting for business in Kazakhstan", description: "Accounting for Kazakhstan companies. Foreign trade, non-residents and manufacturing. Gulshat Adjibayeva and team, with 15+ years of experience." },
+  brandSub: "Accounting for business",
+  nav: [{ label: "Services", href: "#services" }, { label: "About us", href: "#expert" }, { label: "Plans", href: "#pricing" }, { label: "Contact", href: "#consultation" }],
+  menu: "Open menu", closeMenu: "Close menu", skip: "Skip to content", languageLabel: "Website language",
+  consult: "Let’s discuss your business", write: "Message on WhatsApp", more: "Explore services", calculate: "Get a quote",
+  message: "Hello! I'd like to discuss accounting support for my company in Kazakhstan.",
+  hero: {
+    eyebrow: "Business accounting · Kazakhstan", lines: ["No fines.", "No missed deadlines.", "No stress."],
+    text: "A chief accountant with 15 years of experience takes care of taxes, reporting and currency compliance.", ending: "You focus on your business.",
+    note: "Our goal for your accounting, not a guarantee of zero tax risk.", footnote: "Speak directly to an accountant. No forms, no callbacks.",
+    name: "Gulshat Adjibayeva", role: "Your chief accountant", photoAlt: "Gulshat Adjibayeva, chief accountant at Finance Bridge",
+    experience: "15+", experienceLabel: "years in accounting", badge: "Trade & non-residents", team: "An accountant. A whole team.",
   },
-  {
-    id: "B",
-    label: "Специалист + команда",
-    formula: "Формула «Личность и статус»",
-    lines: ["Налоги, ВЭД, МСФО —", "один ответственный человек."],
-    sub: "Гульшат Аджибаева и команда помощников ведут 50+ компаний. Каждый отчёт перед сдачей проверяет главбух лично.",
-    chips: ["15+ лет опыта", "50+ компаний", "Команда 3 человека"],
-    note: "Снимает страх «бухгалтер-одиночка уволился и унёс базу»: за вами стоит команда.",
-  },
-  {
-    id: "C",
-    label: "Результат цифрами",
-    formula: "Формула 4U — максимально короткий оффер",
-    lines: ["0 штрафов. 0 просрочек.", "0 стресса."],
-    sub: "Бухгалтерия под ключ для ТОО и ИП: налоги, кадры, валютный контроль. Фиксированная цена после бесплатного аудита.",
-    chips: ["Фиксированная цена", "Договор", "1С в облаке"],
-    note: "Клиповый вариант: читается за 2 секунды, идеален как первый кадр TikTok-креатива.",
-  },
-];
-
-/* ============================================================
-   ЭКРАН 02 · БОЛИ
-============================================================ */
-export const PAINS: { icon: IconType; text: string }[] = [
-  { icon: AlertTriangle, text: "Просрочили отчёт — налоговая выставила штраф." },
-  { icon: Landmark, text: "Банк заблокировал счёт: «нерабочий НДС» или валютное нарушение." },
-  { icon: FileSearch, text: "Пришла камералка — а отвечать некому и нечего." },
-  { icon: FileSpreadsheet, text: "Учёт в Excel и переписках: документы теряются, налоги «на глаз»." },
-  { icon: UserX, text: "Бухгалтер уволился и унёс всю базу компании." },
-];
-
-/* ============================================================
-   ЭКРАН 03 · О СПЕЦИАЛИСТЕ
-============================================================ */
-export const FACTS: { icon: IconType; title: string; text: string }[] = [
-  { icon: Clock, title: "15+ лет", text: "опыта с ТОО и ИП на всех режимах налогообложения РК" },
-  { icon: GraduationCap, title: "Высшее", text: "экономическое образование, постоянное повышение квалификации" },
-  { icon: Award, title: "Сертификаты", text: "ВЭД · МСФО · работа с нерезидентами · налоговый кодекс РК" },
-  { icon: Users, title: "Команда", text: "3 помощника: пока один в отпуске — другие на связи" },
-];
-
-export const STATS: { value: string; label: string }[] = [
-  { value: "0", label: "штрафов у клиентов за 5 лет" },
-  { value: "50+", label: "компаний на сопровождении" },
-  { value: "2 дня", label: "нужно на переход от другого бухгалтера" },
-];
-
-/* ============================================================
-   ЭКРАН 04 · УСЛУГИ
-============================================================ */
-export const SERVICES: { icon: IconType; title: string; text: string }[] = [
-  { icon: FileText, title: "Налоги и декларации", text: "100, 200, 910, 870 — считаем и сдаём в срок" },
-  { icon: Users, title: "Зарплата и кадры", text: "начисления, отпуска, приказы, больничные" },
-  { icon: Globe2, title: "Валютный контроль", text: "контракты ВЭД, уведомления, паспорта сделок" },
-  { icon: BadgeCheck, title: "Нерезиденты", text: "ИПН у источника, льготы по конвенциям" },
-  { icon: Calculator, title: "МСФО", text: "отчётность по стандартам, подготовка к аудиту" },
-  { icon: FileSearch, title: "Камералки", text: "готовим ответы на требования налоговой" },
-  { icon: RefreshCcw, title: "Восстановление учёта", text: "соберём базу заново, оспорим штрафы" },
-  { icon: Cloud, title: "1С в облаке", text: "документы в порядке, доступ у вас 24/7" },
-];
-
-/* ============================================================
-   ЭКРАН 05 · КАК РАБОТАЕМ
-============================================================ */
-export const STEPS: { icon: IconType; title: string; text: string; time: string }[] = [
-  {
-    icon: MessageCircle,
-    title: "Заявка в WhatsApp",
-    text: "Отвечаем на вопросы, уточняем режим и операции.",
-    time: "10 минут",
-  },
-  {
-    icon: ClipboardList,
-    title: "Аудит за 1 день",
-    text: "Смотрим учёт, риски, долги. Называем цену и фиксируем её в договоре.",
-    time: "1 день",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Сопровождение",
-    text: "Отчёты в срок, налоги под контролем. Вы занимаетесь бизнесом.",
-    time: "каждый месяц",
-  },
-];
-
-/* ============================================================
-   ЭКРАН 06 · ТАРИФЫ
-============================================================ */
-export interface Plan {
-  name: string;
-  audience: string;
-  price: string;
-  popular?: boolean;
-  features: string[];
-}
-
-export const PLANS: Plan[] = [
-  {
-    name: "Упрощёнка",
-    audience: "ИП и ТОО на СНР",
-    price: "от 45 000 ₸",
-    features: [
-      "налоги и декларация 910",
-      "зарплата до 5 сотрудников",
-      "ответы на требования налоговой",
-      "1С в облаке",
+  outcomes: {
+    label: "What it means for you", title: "Less admin.\nMore clarity.",
+    items: [
+      { icon: CalendarCheck, title: "Deadlines in sight", text: "We organise reporting and tax payments into a clear working schedule." },
+      { icon: FileCheck2, title: "Documents in order", text: "We review source documents, identify gaps and work through discrepancies." },
+      { icon: Users, title: "Someone to ask", text: "Discuss your situation with your accountant instead of searching for answers online." },
     ],
   },
-  {
-    name: "Классика",
-    audience: "ТОО на общеустановленном режиме",
-    price: "от 95 000 ₸",
-    popular: true,
-    features: [
-      "декларации 100, 200 и вся отчётность",
-      "кадры и зарплата без ограничений",
-      "валютный контроль по сделкам",
-      "сопровождение камералок",
-      "главбух проверяет каждый отчёт",
+  services: {
+    label: "How we help", title: "We understand\nthe tricky parts.", intro: "From day-to-day bookkeeping to working with international partners.",
+    items: [
+      { icon: Globe2, title: "Import & export", subtitle: "For business across borders", features: ["Foreign currency transactions and contracts", "Import VAT and EAEU trade", "Electronic consignment notes and Virtual Warehouse"] },
+      { icon: Building2, title: "Foreign-owned companies", subtitle: "When non-residents are involved", features: ["Payments to non-residents", "Dividends and royalties", "Tax treaty application"] },
+      { icon: Truck, title: "Manufacturing & logistics", subtitle: "When cost accounting matters", features: ["Materials and finished goods", "Fuel and transport expenses", "Production cost calculations"] },
+      { icon: RefreshCcw, title: "Accounting clean-up", subtitle: "When you need a fresh start", features: ["Reviewing outstanding documents", "Reconciliations and corrections", "Responses to tax authority notices"] },
+    ],
+    problem: "A blocked account or a tax notice?", solution: "Tell us what happened. We’ll work out where to start.", action: "Discuss my situation",
+  },
+  sectors: { label: "Accounting for the way you do business", items: ["Import & export", "Kazakhstan LLPs", "Manufacturing", "Logistics", "Trade", "Non-residents"], pause: "Pause ticker", play: "Resume ticker" },
+  expert: {
+    label: "People behind the numbers", title: "Your accountant.\nWith a team behind them.",
+    text: "I’m Gulshat Adjibayeva. I’ve worked in accounting for over 15 years. Together with my team, I help business owners make sense of their books and work through tax questions with support.",
+    signature: "Gulshat Adjibayeva", role: "Chief accountant · Finance Bridge",
+    facts: [
+      { title: "One contact for your accounting", text: "No need to explain how your business works every time you have a question." },
+      { title: "More than filing reports", text: "We explain what’s happening in your accounts and which documents you need." },
+      { title: "Clear expectations first", text: "We agree on scope, timelines, fees and contractual responsibilities before we start." },
     ],
   },
-  {
-    name: "ВЭД и МСФО",
-    audience: "экспорт, импорт, иностранное участие",
-    price: "от 160 000 ₸",
-    features: [
-      "нерезиденты: ИПН у источника, конвенции",
-      "отчётность по МСФО",
-      "сложный валютный контроль",
-      "подготовка к аудиту",
+  pricing: {
+    label: "Ways to work together", title: "Built around your business.\nNot a template.",
+    text: "Fees depend on transactions, headcount and the condition of your accounts. We agree on the scope before starting work.",
+    tailored: "Priced for your business", focus: "For international business",
+    items: [
+      { icon: Layers3, name: "Start", audience: "For small Kazakhstan LLPs", featured: false, features: ["Day-to-day bookkeeping", "Taxes and reporting", "Payroll calculations", "Accounting advice"] },
+      { icon: Globe2, name: "Trade Active", audience: "For importers and exporters", featured: true, features: ["Ongoing accounting support", "Foreign trade accounting", "Payments to non-residents", "Currency compliance"] },
+      { icon: Building2, name: "Corporate", audience: "For manufacturing and complex accounts", featured: false, features: ["Extended accounting support", "Cost calculations", "Inventory and production accounting", "Management reporting"] },
     ],
   },
-];
-
-/* ============================================================
-   ЭКРАН 07 · FAQ
-============================================================ */
-export const FAQS: { q: string; a: string }[] = [
-  {
-    q: "У нас уже есть штрафы и долги по отчётам. Вы возьмётесь?",
-    a: "Да. Начинаем с аудита: оцениваем риски, восстанавливаем учёт и при возможности оспариваем начисленное. Честно говорим, что реально спасти, а что придётся оплатить.",
+  faq: {
+    label: "Before we talk", title: "A few things\nyou might be wondering.",
+    items: [
+      { q: "Can you help if we already have fines or debts?", a: "Yes. We’ll review your documents and accounts, then suggest next steps. We don’t promise to overturn every fine: outcomes depend on the grounds and the specific situation." },
+      { q: "Do you handle foreign currency and non-residents?", a: "Yes, this is one of our areas of focus. Tell us which countries and partners you work with, and what payments or shipments you’re planning. We’ll discuss the support you need." },
+      { q: "How do we switch from another accountant?", a: "We agree on the documents and access needed, then review opening balances and outstanding issues. After that, we set a handover timeline and an initial work plan." },
+      { q: "Can we work entirely online?", a: "Yes. We’ll agree on a convenient way to share documents and stay in touch. We support companies operating in Kazakhstan, including foreign-owned businesses." },
+      { q: "How do I get a quote?", a: "Tell us what your company does, your headcount and approximate monthly transaction volume. We’ll clarify the details and prepare a quote, with no obligation to sign a contract." },
+    ],
   },
-  {
-    q: "Что будет с документами и доступом?",
-    a: "Ведём учёт в 1С в облаке: у вас круглосуточный доступ к документам и отчётам. Даже если решите сменить бухгалтера — база остаётся у вас, а не «уходит» вместе с нами.",
+  reviews: {
+    label: "Client testimonials",
+    title: "What businesses say about Finance Bridge",
+    items: [
+      {
+        company: "AsiaTrade LLP",
+        industry: "Equipment import & foreign trade",
+        text: "Unblocked our foreign currency account in 3 days and resolved a 1.5M KZT tax authority claim. Gulshat now manages all our currency compliance.",
+        author: "Arman S., Director",
+        rating: 5,
+      },
+      {
+        company: "Global Logistics KZ LLP",
+        industry: "International freight",
+        text: "Switched from an in-house accountant. Zero missed deadlines in 2 years, complete order in source docs and Virtual Warehouse.",
+        author: "Viktor M., Founder",
+        rating: 5,
+      },
+      {
+        company: "Silk Road Trade LLP",
+        industry: "Wholesale trade & EAEU",
+        text: "Organized inventory and VAT accounting flawlessly. Legally reduced our tax burden by over 20% and eliminated audit stress.",
+        author: "Daniyar K., CFO",
+        rating: 5,
+      },
+      {
+        company: "KazProm Tech LLP",
+        industry: "Manufacturing & foreign ownership",
+        text: "Properly applied double tax treaty benefits when distributing dividends to our foreign shareholder, saving 8M KZT.",
+        author: "Elena B., Deputy Director",
+        rating: 5,
+      },
+      {
+        company: "Alatau Distribution LLP",
+        industry: "Distribution & retail",
+        text: "Super responsive: reply within 15 minutes, and our cloud 1C books are accessible 24/7. Complete peace of mind.",
+        author: "Murat T., CEO",
+        rating: 5,
+      },
+    ],
   },
-  {
-    q: "Как быстро вы перейдёте на нас?",
-    a: "От 2 дней: принимаем остатки, сверяемся с налоговой, настраиваем график сдачи. Бизнес при этом не останавливается.",
+  contacts: {
+    label: "Let’s start with your business", title: "Let’s work out your accounting costs",
+    text: "Get a clear cost calculation and expert recommendations for your business accounting today.",
+    expertTitle: "Chief Accountant & Tax Consultant",
+    expertQuote: "“Message me directly on WhatsApp — I will personally review your setup, calculate the quote and advise how to safeguard against tax penalties.”",
+    onlineBadge: "Online · Fast quote within 15 mins",
+    taskSelectorLabel: "1. Select your inquiry:",
+    tasks: [
+      { id: "too", label: "LLP (Simplified / Standard)", message: "I'd like to get a quote for ongoing accounting services for a Kazakhstan LLP." },
+      { id: "ved", label: "Foreign Trade & Non-residents", message: "I'd like to calculate costs for foreign trade, imports/exports and non-resident tax compliance." },
+      { id: "audit", label: "Accounting Clean-up & Audit", message: "We need an accounting health-check and records clean-up." },
+      { id: "ip", label: "Sole Trader & Payroll", message: "I'd like a quote for sole trader accounting, payroll and tax filing." },
+      { id: "custom", label: "Custom Inquiry", message: "I have a custom accounting and tax consultation inquiry." },
+    ],
+    previewLabel: "Your WhatsApp message is ready. Send it with one click:",
+    greeting: "Hello, Gulshat!", introduction: "My name is",
+    quoteMessage: "I'd like an accounting quote for my business (LLP/sole trader).",
+    nameLabel: "2. Your name", optional: "(optional)", namePlaceholder: "For example, Alex",
+    quoteAction: "Get a quote on WhatsApp",
+    steps: ["Choose task & name", "WhatsApp opens with prefilled text", "Gulshat replies within 15 minutes"],
+    response: "Target response time: 15 minutes during working hours.",
+    instagram: "Meet us on Instagram", call: "Call us", location: "Kazakhstan · Remote support", top: "Back to top",
   },
-  {
-    q: "Работаете с валютой и нерезидентами?",
-    a: "Да, это отдельное направление: контракты ВЭД, уведомления по валютным операциям, ИПН у источника и льготы по конвенциям об избежании двойного налогообложения.",
-  },
-  {
-    q: "Чем вы лучше штатного бухгалтера?",
-    a: "Штатный бухгалтер — один человек. У нас команда: отпуска и болезни не останавливают отчётность. Каждый отчёт проверяет главбух. И это обычно дешевле штатной единицы.",
-  },
-  {
-    q: "Где вы находитесь? Работаете онлайн?",
-    a: "Работаем со всем Казахстаном онлайн. Встречи и передача документов — в Алматы или по видеосвязи.",
-  },
-];
+  widget: { open: "Contact us", close: "Close contact panel", title: "How would you like to talk?", subtitle: "Gulshat and the Finance Bridge team", note: "We aim to reply within 15 minutes during working hours.", call: "Call us" },
+};
 
-/* ============================================================
-   ДИЗАЙН-СИСТЕМА
-============================================================ */
-export const TOKENS: { name: string; hex: string; use: string }[] = [
-  { name: "Акцентный зелёный", hex: "#0BA360", use: "кнопки CTA, ключевые цифры, галочки" },
-  { name: "Тёмный (чернила)", hex: "#0B1F16", use: "заголовки, финальный экран, футер" },
-  { name: "Фон секций", hex: "#F4F7F5", use: "чередуется с белым, чтобы разбить экран" },
-  { name: "Белый", hex: "#FFFFFF", use: "карточки и основной фон" },
-  { name: "Серый текст", hex: "#5B6B63", use: "подзаголовки, микротекст, дисклеймеры" },
-];
-
-export const TYPE_RULES: string[] = [
-  "Заголовки — Unbounded (500–700), текст — Manrope (400–700).",
-  "H1 — 28–34 px, H2 — 22–26 px, текст — 15–17 px, кнопка — 16–17 px.",
-  "Межстрочный интервал заголовков — 1.15–1.25, текста — 1.5.",
-];
-
-export const COPY_RULES: string[] = [
-  "Никакого капслока и канцелярита. Запрещены: «индивидуальный подход», «широкий спектр услуг», «профессионалы своего дела».",
-  "Предложения — короче 12 слов. Один абзац — одна мысль.",
-  "Говорим цифрами: деньги, сроки, риски («штраф 168 000 ₸», «переход за 2 дня»).",
-  "В каждом экране — одна мысль и одна кнопка.",
-  "Кнопки — 52–56 px высотой, на всю ширину, зелёные. Касания — не меньше 48 px.",
-];
-
-export const VISUAL_RULES: string[] = [
-  "Фото реального человека (Гульшат) — на первом экране и в блоке «О специалисте».",
-  "Иконки — тонкие, 1.5–2 px обводка, зелёные на светлом фоне.",
-  "Скругления карточек — 16–24 px, мягкие тени, никакого «госсайта».",
-  "До/после и «было/стало» показывают результат лучше длинных списков.",
-];
-
-/* ============================================================
-   ПОЛНЫЙ ПРОМПТ ДЛЯ НЕЙРОСЕТИ
-============================================================ */
-export const FULL_PROMPT = `Ты — Senior UI/UX-дизайнер и конверсионный копирайтер. Твоя специализация — мобильные лендинги (mobile-first, ширина 360–430 px) под трафик из TikTok: пользователь принимает решение за 3–5 секунд, всё решают первый экран и путь «в один клик».
-
-Задача: спроектировать структуру и написать все тексты лендинга частного главного бухгалтера в Казахстане. Не задавай уточняющих вопросов — выдай готовый результат по структуре ниже.
-
-1. ФАКТЫ О СПЕЦИАЛИСТЕ
-— Гульшат Аджибаева, частный главный бухгалтер, работает с командой помощников.
-— 15+ лет опыта, высшее экономическое образование.
-— Сертификаты: ВЭД, МСФО, работа с нерезидентами, налоговый кодекс РК.
-— Формат работы: сопровождение «под ключ» для ТОО и ИП.
-
-2. АУДИТОРИЯ
-— Малый и средний бизнес Казахстана: торговля, логистика, производство.
-— ТОО с иностранным участием, компании с ВЭД (импорт/экспорт, расчёты в валюте).
-— Решения принимает собственник 30–50 лет, часто сам.
-
-3. БОЛИ АУДИТОРИИ
-— Штрафы за просроченные отчёты и ошибки в декларациях.
-— Блокировка счетов: «нерабочий НДС», валютные нарушения.
-— Камеральные проверки и требования, на которые некому отвечать.
-— Учёт «на коленке»: Excel, переписки, потерянные документы.
-— Бухгалтер уволился и унёс базу. Страх «придёт налоговая — что я скажу».
-— Непонятно, за что платят: услуги без фиксации объёма и цены.
-
-4. ОФФЕР (главное обещание)
-Надёжное бухгалтерское и налоговое сопровождение «под ключ»: налоги, отчёты, кадры, валютный контроль — без штрафов, просрочек и блокировок счетов. Фиксированная цена после бесплатного аудита.
-
-5. ПРАВИЛА ТЕКСТА (нарушать нельзя)
-— Никакого капслока, канцелярита и шаблонов («индивидуальный подход», «широкий спектр услуг» — запрещены).
-— Предложения короче 12 слов. Один абзац — одна мысль.
-— Говорим цифрами: деньги, сроки, риски («штраф 168 000 ₸», «переход за 2 дня»).
-— Без давления и обесценивания конкурентов. В каждом экране — одна мысль и одна кнопка.
-
-6. СТРУКТУРА: 8 МОБИЛЬНЫХ ЭКРАНОВ
-Для каждого экрана выдай: заголовок (до 10 слов), подзаголовок (до 20 слов), 3–5 буллетов (до 8 слов каждый), текст кнопки, микротекст под кнопкой, визуальную рекомендацию (где фото, где иконки, какие цвета).
-
-Экран 1. Hero. Дай 3 варианта оффера по формулам «Проблема → Решение → Результат» и 4U:
-— вариант A: «Счета не блокируют. Штрафы не приходят.»;
-— вариант B: про личность и команду («один ответственный человек»);
-— вариант C: результат цифрами («0 штрафов. 0 просрочек. 0 стресса.»).
-Под заголовком — подзаголовок, зелёная кнопка WhatsApp на всю ширину, микротекст «Бесплатно · Ответ за 10 минут», чипы доверия («ТОО и ИП», «ВЭД», «МСФО», «Нерезиденты»), маленькое фото Гульшат с бейджем «15+ лет».
-
-Экран 2. Боли. Заголовок «Узнаёте себя?»: 5 карточек-ситуаций (штраф за просрочку, блокировка счёта, камералка без ответа, учёт в Excel, увольнение бухгалтера с базой). В конце — мостик к решению.
-
-Экран 3. О специалисте. Заголовок про личную ответственность главбуха. Крупное фото Гульшат, 4 факта (15+ лет, образование, сертификаты ВЭД/МСФО/нерезиденты, команда помощников), прямая цитата, строка цифр-результатов (0 штрафов за 5 лет, 50+ компаний, переход за 2 дня).
-
-Экран 4. Услуги. Заголовок «Что входит в сопровождение». Сетка 2×4: налоги и декларации, зарплата и кадры, валютный контроль, нерезиденты, МСФО, камералки и требования, восстановление учёта, 1С в облаке. Внизу — плашка «Переход от другого бухгалтера — за 2 дня, без потери базы».
-
-Экран 5. Как работаем. 3 шага: заявка в WhatsApp (ответ за 10 минут) → аудит за 1 день и фиксация цены → сопровождение. Под шагами — микротекст «Договор, фиксированная цена, отчётность по графику».
-
-Экран 6. Тарифы. Три тарифа в тенге: «Упрощёнка» от 45 000 ₸, «Классика» от 95 000 ₸ (пометить «выбирают чаще всего»), «ВЭД и МСФО» от 160 000 ₸. Под карточками — «Точную цену называем после бесплатного аудита». Кнопки ведут в WhatsApp с готовым сообщением о тарифе.
-
-Экран 7. FAQ. Аккордеон из 5–6 вопросов: долги и штрафы прошлых лет, судьба документов и базы, скорость перехода, работа с валютой и нерезидентами, отличие от штатного бухгалтера, география работы. Внизу — CTA «Не нашли ответ? Напишите в WhatsApp».
-
-Экран 8. Финал и форма. Заголовок «Давайте посчитаем вашу бухгалтерию». Одно необязательное поле «Имя» + большая кнопка WhatsApp, которая открывает чат с готовым сообщением. Под кнопкой — шаги «1. Нажимаете → 2. Открывается WhatsApp → 3. Отправляете». Микротекст: бесплатно, график ответов.
-
-7. ДИЗАЙН-СИСТЕМА
-— Цвета: акцентный зелёный #0BA360, тёмный #0B1F16, серый фон #F4F7F5, белый.
-— Шрифты: заголовки Unbounded (500–700), текст Manrope (400–700).
-— Кнопки 52–56 px на всю ширину, скругления карточек 16–24 px, мягкие тени.
-— Фото реального человека выше фолда и в блоке «О специалисте».
-
-8. ФОРМА ЗАЯВКИ — ПРАВИЛО «ОДНОГО КЛИКА» ДЛЯ TIKTOK
-Никаких длинных форм. CTA — кнопка WhatsApp: открывается чат с готовым сообщением «Здравствуйте, Гульшат! Хочу узнать стоимость бухгалтерии для ТОО/ИП». Максимум одно поле перед кнопкой — имя (необязательно). Под кнопкой микротекст «Отвечаем в течение 10 минут в рабочее время».
-
-9. ФОРМАТ ОТВЕТА
-Верни результат в виде структуры: для каждого экрана — JSON-подобный блок с полями headline, subtitle, bullets, cta, microcopy, visual + человекочитаемый текст рядом. Заголовки — без капслока. Конечный текст должен быть готов к вставке в Tilda / Taplink / Webflow без переписывания.
-
-10. ЧЕК-ЛИСТ ПЕРЕД ЗАПУСКОМ (выдай отдельным списком)
-Что заменить: реальное фото Гульшат, реальный номер WhatsApp, актуальные цены в тенге, реквизиты и юридическая информация, тексты политики обработки данных.`;
-
-/* ============================================================
-   ТЕКСТЫ ПО ЭКРАНАМ ДЛЯ КОПИРОВАНИЯ (вкладка «Промпт и тексты»)
-============================================================ */
-export interface ScreenCopy {
-  id: string;
-  name: string;
-  purpose: string;
-  copy: string;
-}
-
-const b = (s: string) => `• ${s}`;
-
-export const SCREEN_COPIES: ScreenCopy[] = [
-  {
-    id: "01",
-    name: "Hero — первый экран",
-    purpose: "Оффер за 3 секунды + путь в WhatsApp в один клик.",
-    copy: `ЭКРАН 1 · HERO (вариант A — «Проблема → Решение»)
-
-Заголовок: Счета не блокируют. Штрафы не приходят.
-Подзаголовок: Частный главбух с 15-летним опытом берёт на себя налоги, отчёты и валютный контроль. Вы занимаетесь бизнесом.
-Чипы доверия: ТОО и ИП · ВЭД / импорт · МСФО · Нерезиденты
-Кнопка: Получить консультацию в WhatsApp
-Микротекст: Бесплатно · Ответ за 10 минут
-
-Визуал: фото Гульшат с бейджем «15+ лет опыта», маленькое — над заголовком; кнопка зелёная (#0BA360) на всю ширину.
-Варианты оффера B и C — в блоке «3 варианта оффера» выше.`,
-  },
-  {
-    id: "02",
-    name: "Боли владельца бизнеса",
-    purpose: "Попадание в ситуацию: «это про меня». Без запугивания.",
-    copy: `ЭКРАН 2 · БОЛИ
-
-Заголовок: Узнаёте себя?
-Подзаголовок: Ситуации, из-за которых владельцы бизнеса в Казахстане теряют деньги и сон.
-Буллеты:
-${PAINS.map((p) => b(p.text)).join("\n")}
-Кнопка-мостик: Разобрать мою ситуацию в WhatsApp
-
-Визуал: карточки на сером фоне (#F4F7F5), слева тонкая иконка в зелёном круге, текст — 15–16 px. Без красного и «ужасов».`,
-  },
-  {
-    id: "03",
-    name: "О специалисте",
-    purpose: "Снять главный страх — «бухгалтер-одиночка и его база». Показать команду.",
-    copy: `ЭКРАН 3 · О СПЕЦИАЛИСТЕ
-
-Заголовок: Ваш главный бухгалтер отвечает за результат лично.
-Подзаголовок: Гульшат Аджибаева ведёт компании на всех режимах налогообложения РК и проверяет каждый отчёт перед сдачей.
-Факты:
-${FACTS.map((f) => b(`${f.title} — ${f.text}`)).join("\n")}
-Цитата: «Моя задача — чтобы вы не думали о налогах и спали спокойно. За отчёты и риски отвечаю я».
-Цифры: ${STATS.map((s) => `${s.value} — ${s.label}`).join(" · ")}
-
-Визуал: крупное реальное фото, поверх — карточка с именем и статусом. Факты — иконки 2×2. Цифры — крупно, зелёным.`,
-  },
-  {
-    id: "04",
-    name: "Услуги",
-    purpose: "Показать полный контур без «воды» и перегруза.",
-    copy: `ЭКРАН 4 · УСЛУГИ
-
-Заголовок: Что входит в сопровождение
-Подзаголовок: Полный контур бухгалтерии — от первички до ответов налоговой. Ничего лишнего, всё по делу.
-Услуги (сетка 2×4):
-${SERVICES.map((s) => b(`${s.title}: ${s.text}`)).join("\n")}
-Плашка: Переход от другого бухгалтера — за 2 дня, без простоя и потери базы.
-
-Визуал: белый фон, карточки с тонкими иконками; плашка внизу — зелёная подложка 10–12% прозрачности.`,
-  },
-  {
-    id: "05",
-    name: "Как работаем",
-    purpose: "Снять страх неизвестности: понятный путь и фиксированная цена.",
-    copy: `ЭКРАН 5 · КАК РАБОТАЕМ
-
-Заголовок: 3 шага до спокойной бухгалтерии
-${STEPS.map((s, i) => `Шаг ${i + 1}. ${s.title} (${s.time}): ${s.text}`).join("\n")}
-Микротекст: Договор, фиксированная цена, отчётность по графику — без сюрпризов.
-
-Визуал: вертикальная линия-таймлайн с номерами 01/02/03, серый фон секции.`,
-  },
-  {
-    id: "06",
-    name: "Тарифы",
-    purpose: "Прозрачность цены. Средний тариф выделен — «выбирают чаще всего».",
-    copy: `ЭКРАН 6 · ТАРИФЫ
-
-Заголовок: Прозрачные тарифы
-Подзаголовок: Цена зависит от режима и операций. После аудита фиксируем её в договоре.
-${PLANS.map(
-  (p) =>
-    `Тариф «${p.name}» — ${p.price}/мес. Для: ${p.audience}.${p.popular ? " (выбирают чаще всего)" : ""}\n${p.features.map((f) => b(f)).join("\n")}`,
-).join("\n\n")}
-Микротекст: Точную цену называем после бесплатного аудита. Без скрытых доплат.
-
-Визуал: три карточки, средняя — с зелёной рамкой и бейджем. Кнопки ведут в WhatsApp с готовым сообщением о тарифе.`,
-  },
-  {
-    id: "07",
-    name: "FAQ",
-    purpose: "Снять последние возражения перед заявкой.",
-    copy: `ЭКРАН 7 · FAQ
-
-Заголовок: Вопросы, которые задают до старта
-${FAQS.map((f) => `Вопрос: ${f.q}\nОтвет: ${f.a}`).join("\n\n")}
-Кнопка внизу: Не нашли ответ? Напишите в WhatsApp
-
-Визуал: аккордеон (details/summary), стрелка поворачивается, первый вопрос открыт.`,
-  },
-  {
-    id: "08",
-    name: "Финал + форма WhatsApp",
-    purpose: "Максимально лёгкий лид: один клик до чата с готовым сообщением.",
-    copy: `ЭКРАН 8 · ФИНАЛ И ФОРМА
-
-Заголовок: Давайте посчитаем вашу бухгалтерию
-Подзаголовок: За 10 минут поймёте, сколько стоит спокойствие и что нужно поправить в учёте уже сейчас.
-Поле: Имя (необязательно)
-Кнопка: Получить расчёт в WhatsApp — открывает чат с готовым сообщением: «Здравствуйте, Гульшат! Хочу узнать стоимость бухгалтерии для моей компании (ТОО/ИП)».
-Шаги под кнопкой: 1. Нажимаете кнопку → 2. Открывается WhatsApp → 3. Отправляете готовое сообщение
-Микротекст: Бесплатно · Отвечаем в рабочее время 9:00–19:00 (Алматы)
-
-Визуал: тёмный финальный экран (#0B1F16) с зелёной кнопкой и «пузырём» чата — так пользователь видит, что именно отправится.`,
-  },
-];
+export const content = { ru, en };

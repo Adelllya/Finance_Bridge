@@ -1,87 +1,71 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
 import Landing from "./components/Landing";
-import PromptView from "./components/PromptView";
-import { cn } from "./utils/cn";
+import { BridgeMark, WaIcon } from "./components/ui";
+import { BRAND, waUrl } from "./data/content";
+import { LanguageProvider, useLanguage } from "./i18n";
 
-type Tab = "landing" | "prompt";
+function Website() {
+  const { language, setLanguage, t } = useLanguage();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
 
-function tabFromHash(): Tab {
-  return window.location.hash.replace("#", "") === "prompt" ? "prompt" : "landing";
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    const onOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !header.current?.contains(event.target)) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onOutside);
+    };
+  }, [menuOpen]);
+
+  return (
+    <>
+      <a href="#main" className="skip-link">{t.skip}</a>
+      <header ref={header} className="site-header" onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false);
+      }}>
+        <div className="container header-inner">
+          <a href="#top" className="brand" aria-label={BRAND} onClick={() => setMenuOpen(false)}>
+            <BridgeMark />
+            <span><strong>{BRAND}</strong><small>{t.brandSub}</small></span>
+          </a>
+          <nav className="desktop-nav" aria-label={language === "ru" ? "Основная навигация" : "Main navigation"}>
+            {t.nav.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
+          </nav>
+          <div className="header-actions">
+            <div className="language-switch" role="group" aria-label={t.languageLabel}>
+              {(["ru", "en"] as const).map((value) => (
+                <button key={value} type="button" lang={value} aria-label={value === "ru" ? "Русский" : "English"} aria-pressed={language === value} onClick={() => setLanguage(value)}>{value.toUpperCase()}</button>
+              ))}
+            </div>
+            <a className="header-whatsapp" href={waUrl(t.message)} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><WaIcon /><span>WhatsApp</span></a>
+            <button ref={menuButton} type="button" className="icon-button menu-toggle" aria-label={menuOpen ? t.closeMenu : t.menu} aria-expanded={menuOpen} aria-controls="mobile-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+          </div>
+        </div>
+        <nav id="mobile-nav" className="mobile-nav" aria-label={language === "ru" ? "Мобильная навигация" : "Mobile navigation"} hidden={!menuOpen}>
+          <div className="container">{t.nav.map((link) => <a key={link.href} href={link.href} onClick={() => {
+            setMenuOpen(false);
+            document.querySelector<HTMLElement>(link.href)?.focus({ preventScroll: true });
+          }}>{link.label}<span aria-hidden="true">↗</span></a>)}</div>
+        </nav>
+      </header>
+      <main id="main" tabIndex={-1}><Landing /></main>
+    </>
+  );
 }
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>(tabFromHash);
-
-  useEffect(() => {
-    const onHash = () => setTab(tabFromHash());
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-
-  const go = useCallback((next: Tab) => {
-    window.location.hash = next === "prompt" ? "prompt" : "";
-    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-    setTab(next);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-paper">
-      {/* ─── шапка-переключатель ─── */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-ink-950/92 backdrop-blur-md">
-        <div className="mx-auto flex h-12 max-w-6xl items-center justify-between gap-3 px-3 lg:h-16 lg:px-6">
-          <button
-            type="button"
-            onClick={() => go("landing")}
-            className="flex cursor-pointer items-center gap-2.5 text-left"
-          >
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-600 shadow-md shadow-brand-600/30 lg:h-9 lg:w-9">
-              <span className="font-display text-[14px] font-bold text-white lg:text-[15px]">Б</span>
-            </span>
-            <span>
-              <span className="block text-[13px] font-extrabold leading-none text-white lg:text-[14px]">
-                Лендинг-кит
-              </span>
-              <span className="mt-1 hidden text-[10px] font-semibold leading-none text-white/45 sm:block">
-                Гульшат Аджибаева · главбух · Казахстан
-              </span>
-            </span>
-          </button>
-
-          <nav className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
-            {(
-              [
-                ["landing", "Лендинг"],
-                ["prompt", "Промпт и тексты"],
-              ] as [Tab, string][]
-            ).map(([key, label]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => go(key)}
-                className={cn(
-                  "cursor-pointer rounded-lg px-3 py-1.5 text-[12px] font-bold transition lg:px-4 lg:text-[13px]",
-                  tab === key ? "bg-white text-ink-900 shadow" : "text-white/60 hover:text-white",
-                )}
-              >
-                {label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </header>
-
-      {/* ─── контент ─── */}
-      <main>{tab === "landing" ? <Landing /> : <PromptView onOpenLanding={() => go("landing")} />}</main>
-
-      {/* ─── подвал ─── */}
-      <footer className="border-t border-white/10 bg-ink-950 py-7 text-center">
-        <p className="px-4 text-[12px] font-medium leading-relaxed text-white/40">
-          Прототип собран на React + Tailwind: тексты и структуру можно перенести в Tilda, Taplink или Webflow.
-        </p>
-        <p className="mt-1.5 px-4 text-[11px] text-white/30">
-          Демо: номер WhatsApp, фото и цены — заглушки. Замените перед публикацией.
-        </p>
-      </footer>
-    </div>
-  );
+  return <LanguageProvider><Website /></LanguageProvider>;
 }

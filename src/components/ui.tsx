@@ -1,111 +1,18 @@
-import { useCallback, useState, type ReactNode } from "react";
-import { Check, Copy, Download } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowUpRight, MessageCircle, Phone, X } from "lucide-react";
 import { cn } from "../utils/cn";
+import { waUrl, igUrl, phoneUrl } from "../data/content";
+import { useLanguage } from "../i18n";
 
-/* ---------- буфер обмена ---------- */
-export async function copyText(value: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(value);
-    return true;
-  } catch {
-    try {
-      const ta = document.createElement("textarea");
-      ta.value = value;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      return ok;
-    } catch {
-      return false;
-    }
-  }
-}
-
-export function downloadTextFile(filename: string, text: string) {
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-/* ---------- кнопка «копировать» ---------- */
-export function CopyButton({
-  text,
-  label = "копировать",
-  copiedLabel = "скопировано",
-  className,
-  tone = "light",
-}: {
-  text: string;
-  label?: string;
-  copiedLabel?: string;
-  className?: string;
-  tone?: "light" | "dark" | "green";
-}) {
-  const [done, setDone] = useState(false);
-  const onCopy = useCallback(async () => {
-    const ok = await copyText(text);
-    if (ok) {
-      setDone(true);
-      window.setTimeout(() => setDone(false), 1800);
-    }
-  }, [text]);
-
+export function BridgeMark({ className }: { className?: string }) {
   return (
-    <button
-      type="button"
-      onClick={onCopy}
-      className={cn(
-        "inline-flex cursor-pointer items-center gap-1.5 rounded-xl px-3 py-1.5 text-[12.5px] font-bold transition active:scale-95",
-        tone === "light" && "border border-ink-900/10 bg-white text-ink-900 hover:border-brand-600/40 hover:text-brand-700",
-        tone === "dark" && "border border-white/15 bg-white/10 text-white hover:bg-white/20",
-        tone === "green" && "bg-brand-600 text-white shadow-sm hover:bg-brand-700",
-        done && "bg-brand-600 text-white border-transparent",
-        className,
-      )}
-    >
-      {done ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-      {done ? copiedLabel : label}
-    </button>
+    <svg viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+      <rect width="48" height="48" rx="13" fill="currentColor" />
+      <path d="M10 32V17m28 15V17M10 21c9 0 8 9 14 9s5-9 14-9M8 33h32M16 25v8m8-3v3m8-8v8" stroke="#35d68b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
 
-/* ---------- кнопка «скачать .txt» ---------- */
-export function DownloadButton({
-  filename,
-  text,
-  label = "скачать .txt",
-  className,
-}: {
-  filename: string;
-  text: string;
-  label?: string;
-  className?: string;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={() => downloadTextFile(filename, text)}
-      className={cn(
-        "inline-flex cursor-pointer items-center gap-1.5 rounded-xl border border-ink-900/10 bg-white px-3 py-1.5 text-[12.5px] font-bold text-ink-900 transition hover:border-brand-600/40 hover:text-brand-700 active:scale-95",
-        className,
-      )}
-    >
-      <Download className="h-3.5 w-3.5" />
-      {label}
-    </button>
-  );
-}
-
-/* ---------- иконка WhatsApp ---------- */
 export function WaIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
@@ -114,40 +21,94 @@ export function WaIcon({ className }: { className?: string }) {
   );
 }
 
-/* ---------- мелкий бейдж-ярлык ---------- */
-export function Tag({
-  children,
-  tone = "green",
-  className,
-}: {
-  children: ReactNode;
-  tone?: "green" | "ink" | "gray" | "wa";
-  className?: string;
-}) {
+export function IgIcon({ className }: { className?: string }) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold",
-        tone === "green" && "bg-brand-600/10 text-brand-700",
-        tone === "ink" && "bg-ink-900 text-white",
-        tone === "gray" && "bg-ink-900/5 text-ink-900/60",
-        tone === "wa" && "bg-[#25D366]/10 text-[#128C4A]",
-        className,
-      )}
-    >
-      {children}
-    </span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className} aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
   );
 }
 
-/* ---------- маркер «экран 01 · название» ---------- */
-export function ScreenNo({ no, name }: { no: string; name: string }) {
+export function FloatingBadge({ children, className }: { children: ReactNode; className?: string }) {
+  return <div className={cn("floating-badge", className)}>{children}</div>;
+}
+
+export function GoldDivider({ className }: { className?: string }) {
+  return <div className={cn("gold-divider", className)} aria-hidden="true" />;
+}
+
+export function SectionDivider({ className }: { className?: string }) {
+  return <GoldDivider className={className} />;
+}
+
+export function ChatWidget({ avatarSrc }: { avatarSrc: string }) {
+  const { t } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const [nearContacts, setNearContacts] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  const widget = useRef<HTMLDivElement>(null);
+
+  function close() {
+    setOpen(false);
+    trigger.current?.focus();
+  }
+
+  useEffect(() => {
+    if (!open) return;
+    panel.current?.querySelector<HTMLButtonElement>("button")?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        trigger.current?.focus();
+      }
+    };
+    const onOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !widget.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onOutside);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const target = document.querySelector(".reviews-section") || document.getElementById("contacts");
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      setNearContacts(rect.top <= window.innerHeight);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="inline-flex items-center gap-2">
-      <span className="flex h-6 min-w-6 items-center justify-center rounded-lg bg-ink-900 px-1.5 font-display text-[9px] font-semibold tracking-wide text-white">
-        {no}
-      </span>
-      <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-ink-900/40">{name}</span>
+    <div ref={widget} className={cn("contact-widget", nearContacts && !open && "at-contacts")} onBlur={(event) => {
+      if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+    }}>
+      <div ref={panel} id="contact-panel" className="contact-panel" role="region" aria-label={t.widget.title} hidden={!open}>
+        <div className="contact-panel-heading">
+          <span className="eyebrow">Finance Bridge</span>
+          <button type="button" className="icon-button" onClick={close} aria-label={t.widget.close}><X /></button>
+        </div>
+        <h2>{t.widget.title}</h2>
+        <p>{t.widget.subtitle}</p>
+        <a className="contact-option whatsapp-option" href={waUrl(t.message)} target="_blank" rel="noopener noreferrer"><WaIcon /> WhatsApp <ArrowUpRight /></a>
+        <a className="contact-option" href={igUrl()} target="_blank" rel="noopener noreferrer"><IgIcon /> Instagram <ArrowUpRight /></a>
+        <a className="contact-option" href={phoneUrl}><Phone />{t.widget.call}<ArrowUpRight /></a>
+        <p className="small-print">{t.widget.note}</p>
+      </div>
+      <button ref={trigger} type="button" className="contact-trigger" aria-expanded={open} aria-controls="contact-panel" aria-label={open ? t.widget.close : t.widget.open} onClick={() => setOpen(!open)}>
+        <span className="avatar"><img src={avatarSrc} width="183" height="580" alt="" /></span>
+        <span className="trigger-text">{t.widget.open}</span>
+        {open ? <X /> : <MessageCircle />}
+      </button>
     </div>
   );
 }

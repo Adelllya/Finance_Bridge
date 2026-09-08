@@ -152,11 +152,15 @@ h1 {
 }
 
 .hero-headline-item.hero-headline-accent {
-  background: linear-gradient(135deg, #e5b869 0%, #f3e5ab 40%, #c59b27 100%);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-style: italic;
+  background: linear-gradient(135deg, #fce588 0%, #e5b869 45%, #d4af37 80%, #b8860b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 4px 14px rgba(229, 184, 105, 0.35));
+  filter: drop-shadow(0 4px 16px rgba(229, 184, 105, 0.4));
+  letter-spacing: -0.01em;
 }
 
 h1.english-heading .hero-headline-item {

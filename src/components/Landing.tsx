@@ -53,8 +53,11 @@ function ReviewsMarquee() {
   return (
     <section className="reviews-section" aria-labelledby="reviews-heading">
       <div className="container reviews-heading-row">
-        <div>
-          <p className="eyebrow">{t.reviews.label}</p>
+        <div className="reviews-heading-left">
+          <span className="reviews-tag">
+            <Sparkles style={{ width: 13, height: 13, color: "#e5b869" }} />
+            {t.reviews.label} · 4.9 ★★★★★
+          </span>
           <h2 id="reviews-heading">{t.reviews.title}</h2>
         </div>
         <button
@@ -79,19 +82,21 @@ function ReviewsMarquee() {
                       src={clientAvatars[idx % clientAvatars.length]}
                       alt={item.author}
                       className="review-avatar"
-                      width="52"
-                      height="52"
+                      width="40"
+                      height="40"
                       loading="eager"
                     />
                     <div className="review-header-info">
-                      <div className="review-stars">
-                        {"★".repeat(item.rating)}
+                      <div className="review-header-top">
+                        <span className="review-stars">
+                          {"★".repeat(item.rating)}
+                        </span>
+                        <span className="review-verified">
+                          <Check style={{ width: 11, height: 11 }} />
+                          Проверенный клиент
+                        </span>
                       </div>
                       <span className="review-company">{item.company}</span>
-                      <span className="review-verified">
-                        <Check style={{ width: 12, height: 12 }} />
-                        Проверенный клиент
-                      </span>
                     </div>
                   </div>
                   <p className="review-text">"{item.text}"</p>
@@ -434,47 +439,64 @@ export default function Landing() {
 
         <div id="contacts" className="contacts-section">
           <div className="container contacts-grid">
-            <div className="contact-intro">
-              <p className="eyebrow">{t.contacts.label}</p>
-              <h2>{t.contacts.title}</h2>
-              <p className="contact-description">{t.contacts.text}</p>
+            <div className="contact-left-col">
+              <div className="contact-intro">
+                <p className="eyebrow">{t.contacts.label}</p>
+                <h2>{t.contacts.title}</h2>
+                <p className="contact-description">{t.contacts.text}</p>
 
-              {/* Expert Profile Card with Gulshat */}
-              <div className="expert-consult-card">
-                <div className="expert-consult-avatar-wrap">
-                  <img
-                    src={gulshatPortrait}
-                    alt={t.hero.name}
-                    className="expert-consult-avatar"
-                    width="80"
-                    height="80"
-                    loading="eager"
-                  />
-                  <div className="live-status-badge">
-                    <span className="live-dot" />
-                    <span>{t.contacts.onlineBadge}</span>
+                {/* Expert Profile Card with Gulshat */}
+                <div className="expert-consult-card">
+                  <div className="expert-consult-avatar-wrap">
+                    <img
+                      src={gulshatPortrait}
+                      alt={t.hero.name}
+                      className="expert-consult-avatar"
+                      width="80"
+                      height="80"
+                      loading="eager"
+                    />
+                    <span className="avatar-online-dot" aria-label="В сети" />
+                  </div>
+                  <div className="expert-consult-info">
+                    <div className="live-status-badge">
+                      <span className="live-dot" />
+                      <span>{t.contacts.onlineBadge}</span>
+                    </div>
+                    <h3>{t.hero.name}</h3>
+                    <p className="expert-consult-role">{t.contacts.expertTitle}</p>
+                    <p className="expert-consult-quote">{t.contacts.expertQuote}</p>
                   </div>
                 </div>
-                <div className="expert-consult-info">
-                  <h3>{t.hero.name}</h3>
-                  <p className="expert-consult-role">{t.contacts.expertTitle}</p>
-                  <p className="expert-consult-quote">{t.contacts.expertQuote}</p>
+
+                <div className="consult-trust-pills">
+                  <div className="consult-pill">
+                    <Check />
+                    <span>15 мин на ответ</span>
+                  </div>
+                  <div className="consult-pill">
+                    <ShieldCheck style={{ width: 14, height: 14, color: "#e5b869" }} />
+                    <span>Без спама и лишних услуг</span>
+                  </div>
+                  <div className="consult-pill">
+                    <Sparkles style={{ width: 14, height: 14, color: "#e5b869" }} />
+                    <span>Бесплатный экспресс-разбор</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="consult-trust-pills">
-                <div className="consult-pill">
-                  <Check />
-                  <span>15 мин на ответ</span>
-                </div>
-                <div className="consult-pill">
-                  <ShieldCheck style={{ width: 14, height: 14, color: "#e5b869" }} />
-                  <span>Без спама и лишних услуг</span>
-                </div>
-                <div className="consult-pill">
-                  <Sparkles style={{ width: 14, height: 14, color: "#e5b869" }} />
-                  <span>Бесплатный экспресс-разбор</span>
-                </div>
+              <div className="contact-links">
+                <p className="response-note">{t.contacts.response}</p>
+                <a className="contact-social" href={igUrl()} target="_blank" rel="noopener noreferrer">
+                  <IgIcon />
+                  <span>{t.contacts.instagram}<small>@gulshat_121985</small></span>
+                  <ArrowUpRight />
+                </a>
+                <a className="contact-social" href={phoneUrl}>
+                  <Phone />
+                  <span>{PHONE_DISPLAY}<small>{t.contacts.call}</small></span>
+                  <ArrowUpRight />
+                </a>
               </div>
             </div>
 
@@ -536,20 +558,6 @@ export default function Landing() {
                   </li>
                 ))}
               </ol>
-            </div>
-
-            <div className="contact-links">
-              <p className="response-note">{t.contacts.response}</p>
-              <a className="contact-social" href={igUrl()} target="_blank" rel="noopener noreferrer">
-                <IgIcon />
-                <span>{t.contacts.instagram}<small>@gulshat_121985</small></span>
-                <ArrowUpRight />
-              </a>
-              <a className="contact-social" href={phoneUrl}>
-                <Phone />
-                <span>{PHONE_DISPLAY}<small>{t.contacts.call}</small></span>
-                <ArrowUpRight />
-              </a>
             </div>
           </div>
 

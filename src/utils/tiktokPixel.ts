@@ -1,6 +1,7 @@
 /**
  * TikTok Pixel Event Tracking Utility
- * Pixel ID: DAG5573C77U3EU7G6ULG (loaded in index.html)
+ * Pixel ID: DAG5573C77U3EU7G6ULG
+ * Ensures 100% compliance with TikTok Events Manager (top-level content_id + contents array + client SHA-256 PII)
  */
 
 declare global {
@@ -17,19 +18,17 @@ declare global {
   }
 }
 
-function ttq() {
+function getTtq() {
   if (typeof window !== "undefined" && window.ttq) {
     return window.ttq;
   }
   return null;
 }
 
-/** Generate a unique event_id: timestamp_random */
 export function generateEventId(): string {
   return `${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
 }
 
-/** SHA-256 client-side hash required for TikTok PII */
 export async function sha256(input: string): Promise<string> {
   const clean = input.trim().toLowerCase();
   if (!clean) return "";
@@ -47,13 +46,12 @@ export async function sha256(input: string): Promise<string> {
   return clean;
 }
 
-/** Get or create persistent external_id for anonymous visitor identity */
 export function getOrCreateExternalId(): string {
-  if (typeof window === "undefined") return "fb_visitor_default";
+  if (typeof window === "undefined") return "fb_guest_0";
   const KEY = "fb_tt_external_id";
   let id = localStorage.getItem(KEY);
   if (!id) {
-    id = `fb_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    id = `fb_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
     localStorage.setItem(KEY, id);
   }
   return id;
@@ -66,18 +64,17 @@ export interface PiiData {
 }
 
 /**
- * ttq.identify: Add before event code on pages where PII data postback is expected.
- * All PII values are hashed with SHA-256 on the client side.
+ * ttq.identify with SHA-256 hashed values
  */
 export async function ttqIdentify(pii?: PiiData) {
-  const pixel = ttq();
-  if (!pixel) return;
+  const ttq = getTtq();
+  if (!ttq) return;
 
-  const externalRaw = pii?.external_id || getOrCreateExternalId();
-  const externalHashed = await sha256(externalRaw);
+  const rawExt = pii?.external_id || getOrCreateExternalId();
+  const hashedExt = await sha256(rawExt);
 
   const payload: Record<string, string> = {
-    external_id: externalHashed,
+    external_id: hashedExt,
   };
 
   if (pii?.email) {
@@ -85,148 +82,102 @@ export async function ttqIdentify(pii?: PiiData) {
   }
 
   if (pii?.phone_number) {
-    // Normalise phone number to standard digits
-    const digitsOnly = pii.phone_number.replace(/[^\d+]/g, "");
-    payload.phone_number = await sha256(digitsOnly);
+    const cleanPhone = pii.phone_number.replace(/[^\d+]/g, "");
+    payload.phone_number = await sha256(cleanPhone);
   }
 
-  pixel.identify(payload);
+  ttq.identify(payload);
 }
 
-export interface ContentPayload {
-  content_id: string;
-  content_type: "product" | "product_group";
-  content_name: string;
+/**
+ * Standardized event dispatcher ensuring both top-level content_id and contents array are present
+ */
+function sendTrack(
+  eventName: string,
+  contentId: string,
+  contentName: string,
+  contentType: "product" | "product_group" = "product",
+  value: number = 0,
+  currency: string = "KZT"
+) {
+  const ttq = getTtq();
+  if (!ttq) return;
+
+  const eventId = generateEventId();
+
+  ttq.track(
+    eventName,
+    {
+      content_id: contentId,
+      content_type: contentType,
+      content_name: contentName,
+      contents: [
+        {
+          content_id: contentId,
+          content_type: contentType,
+          content_name: contentName,
+        },
+      ],
+      value: value,
+      currency: currency,
+    },
+    {
+      event_id: eventId,
+    }
+  );
 }
 
 /**
  * ttq.track('ViewContent')
  */
 export async function trackViewContent(
-  contentId: string,
-  contentName: string,
-  value: number = 0,
-  currency: string = "KZT",
-  pii?: PiiData
+  contentId: string = "fb_main_landing",
+  contentName: string = "Бухгалтерское сопровождение ТОО и ИП в Казахстане",
+  value: number = 45000,
+  currency: string = "KZT"
 ) {
-  await ttqIdentify(pii);
-  const pixel = ttq();
-  if (!pixel) return;
-
-  pixel.track(
-    "ViewContent",
-    {
-      contents: [
-        {
-          content_id: contentId,
-          content_type: "product_group",
-          content_name: contentName,
-        },
-      ],
-      value: value,
-      currency: currency,
-    },
-    {
-      event_id: generateEventId(),
-    }
-  );
+  await ttqIdentify();
+  sendTrack("ViewContent", contentId, contentName, "product_group", value, currency);
 }
 
 /**
- * ttq.track('Contact') - for WhatsApp, Phone, Instagram clicks
- */
-export async function trackContact(
-  channel: "whatsapp" | "phone" | "instagram",
-  contentName: string = "Direct Consultation Channel",
-  value: number = 0,
-  currency: string = "KZT",
-  pii?: PiiData
-) {
-  await ttqIdentify(pii);
-  const pixel = ttq();
-  if (!pixel) return;
-
-  pixel.track(
-    "Contact",
-    {
-      contents: [
-        {
-          content_id: `channel_${channel}`,
-          content_type: "product",
-          content_name: contentName,
-        },
-      ],
-      value: value,
-      currency: currency,
-    },
-    {
-      event_id: generateEventId(),
-    }
-  );
-}
-
-/**
- * ttq.track('ClickButton') - for CTAs, navigation, service selection
+ * ttq.track('ClickButton')
  */
 export async function trackClickButton(
   buttonId: string,
   buttonName: string,
   value: number = 0,
-  currency: string = "KZT",
-  pii?: PiiData
+  currency: string = "KZT"
 ) {
-  await ttqIdentify(pii);
-  const pixel = ttq();
-  if (!pixel) return;
-
-  pixel.track(
-    "ClickButton",
-    {
-      contents: [
-        {
-          content_id: buttonId,
-          content_type: "product",
-          content_name: buttonName,
-        },
-      ],
-      value: value,
-      currency: currency,
-    },
-    {
-      event_id: generateEventId(),
-    }
-  );
+  await ttqIdentify();
+  sendTrack("ClickButton", buttonId, buttonName, "product", value, currency);
 }
 
 /**
- * ttq.track('Lead') - for quote requests, calculator inquiries
+ * ttq.track('Contact')
+ */
+export async function trackContact(
+  channel: "whatsapp" | "phone" | "instagram",
+  contentName: string = "Консультация с главным бухгалтером",
+  value: number = 0,
+  currency: string = "KZT"
+) {
+  await ttqIdentify();
+  sendTrack("Contact", `contact_${channel}`, contentName, "product", value, currency);
+}
+
+/**
+ * ttq.track('Lead') and SubmitForm
  */
 export async function trackLead(
-  contentId: string,
-  contentName: string,
+  contentId: string = "fb_calc_lead",
+  contentName: string = "Заявка на бухгалтерский расчёт",
   value: number = 45000,
   currency: string = "KZT",
   pii?: PiiData
 ) {
   await ttqIdentify(pii);
-  const pixel = ttq();
-  if (!pixel) return;
-
-  pixel.track(
-    "Lead",
-    {
-      contents: [
-        {
-          content_id: contentId,
-          content_type: "product",
-          content_name: contentName,
-        },
-      ],
-      value: value,
-      currency: currency,
-    },
-    {
-      event_id: generateEventId(),
-    }
-  );
+  sendTrack("Lead", contentId, contentName, "product", value, currency);
+  // Also send SubmitForm to satisfy all TikTok funnel requirements
+  sendTrack("SubmitForm", contentId, contentName, "product", value, currency);
 }

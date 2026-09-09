@@ -1,97 +1,84 @@
-import { useEffect, useState } from "react";
-import { Header } from "./components/Header";
-import { HomePage } from "./components/HomePage";
-import { ServicesPage } from "./components/ServicesPage";
-import { PricingPage } from "./components/PricingPage";
-import { AboutPage } from "./components/AboutPage";
-import { CalculatorPage } from "./components/CalculatorPage";
-import { Footer } from "./components/Footer";
-import { FloatingWhatsAppButton } from "./components/ui";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
+import Landing from "./components/Landing";
+import { BridgeMark, WaIcon } from "./components/ui";
+import { BRAND, waUrl } from "./data/content";
 import { LanguageProvider, useLanguage } from "./i18n";
-import type { PageId } from "./data/content";
-import { trackViewContent } from "./utils/tiktokPixel";
+import { trackContact } from "./utils/tiktokPixel";
 
-function getPageFromHash(): PageId {
-  const hash = window.location.hash.replace("#/", "").replace("#", "").toLowerCase();
-  if (hash === "services") return "services";
-  if (hash === "pricing") return "pricing";
-  if (hash === "about") return "about";
-  if (hash === "calculator" || hash === "contacts" || hash === "consultation") return "calculator";
-  return "home";
-}
-
-function MainApp() {
-  const { language } = useLanguage();
-  const [activePage, setActivePage] = useState<PageId>(getPageFromHash);
-  const [selectedTaskParam, setSelectedTaskParam] = useState<string | undefined>(undefined);
+function Website() {
+  const { language, setLanguage, t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const handleHash = () => {
-      const pg = getPageFromHash();
-      setActivePage(pg);
-      trackViewContent(pg, `Page: ${pg}`);
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
     };
-    // initial page view
-    trackViewContent(activePage, `Page: ${activePage}`);
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const onOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !header.current?.contains(event.target)) setMenuOpen(false);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  function handleNavigate(page: PageId, taskParam?: string) {
-    if (taskParam) {
-      setSelectedTaskParam(taskParam);
-    }
-    setActivePage(page);
-    trackViewContent(page, `Page: ${page}`);
-    window.location.hash = `#/${page}`;
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setMenuOpen(false);
-  }
-
-  const floatingMessage =
-    language === "ru"
-      ? "Здравствуйте! Хочу проконсультироваться по бухгалтерскому сопровождению."
-      : "Hello! I would like a consultation regarding business accounting in Kazakhstan.";
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onOutside);
+    };
+  }, [menuOpen]);
 
   return (
-    <div className="site-wrapper">
-      <Header
-        activePage={activePage}
-        onSelectPage={(p) => handleNavigate(p)}
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        scrolled={scrolled}
-      />
-
-      <main id="main-content">
-        {activePage === "home" && <HomePage onNavigate={handleNavigate} />}
-        {activePage === "services" && <ServicesPage onNavigate={handleNavigate} />}
-        {activePage === "pricing" && <PricingPage onNavigate={handleNavigate} />}
-        {activePage === "about" && <AboutPage onNavigate={handleNavigate} />}
-        {activePage === "calculator" && <CalculatorPage initialTask={selectedTaskParam} />}
-      </main>
-
-      <Footer onNavigate={handleNavigate} />
-
-      <FloatingWhatsAppButton message={floatingMessage} />
-    </div>
+    <>
+      <a href="#main" className="skip-link">{t.skip}</a>
+      <header ref={header} className="site-header" onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false);
+      }}>
+        <div className="container header-inner">
+          <a href="#top" className="brand" aria-label={BRAND} onClick={() => setMenuOpen(false)}>
+            <BridgeMark />
+            <span><strong>{BRAND}</strong><small>{t.brandSub}</small></span>
+          </a>
+          <nav className="desktop-nav" aria-label={language === "ru" ? "Основная навигация" : "Main navigation"}>
+            {t.nav.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
+          </nav>
+          <div className="header-actions">
+            <div className="language-switch" role="group" aria-label={t.languageLabel}>
+              {(["ru", "en"] as const).map((value) => (
+                <button key={value} type="button" lang={value} aria-label={value === "ru" ? "Русский" : "English"} aria-pressed={language === value} onClick={() => setLanguage(value)}>{value.toUpperCase()}</button>
+              ))}
+            </div>
+            <a
+              className="header-whatsapp"
+              href={waUrl(t.message)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              onClick={() => {
+                trackContact("whatsapp", "header_top_button");
+              }}
+            >
+              <WaIcon />
+              <span>WhatsApp</span>
+            </a>
+            <button ref={menuButton} type="button" className="icon-button menu-toggle" aria-label={menuOpen ? t.closeMenu : t.menu} aria-expanded={menuOpen} aria-controls="mobile-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+          </div>
+        </div>
+        <nav id="mobile-nav" className="mobile-nav" aria-label={language === "ru" ? "Мобильная навигация" : "Mobile navigation"} hidden={!menuOpen}>
+          <div className="container">{t.nav.map((link) => <a key={link.href} href={link.href} onClick={() => {
+            setMenuOpen(false);
+            document.querySelector<HTMLElement>(link.href)?.focus({ preventScroll: true });
+          }}>{link.label}<span aria-hidden="true">↗</span></a>)}</div>
+        </nav>
+      </header>
+      <main id="main" tabIndex={-1}><Landing /></main>
+    </>
   );
 }
 
 export default function App() {
-  return (
-    <LanguageProvider>
-      <MainApp />
-    </LanguageProvider>
-  );
+  return <LanguageProvider><Website /></LanguageProvider>;
 }

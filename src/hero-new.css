@@ -13,6 +13,19 @@
   padding: 120px 0 100px;
 }
 
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/finance-bridge-hero.jpg");
+  background-size: cover;
+  background-position: center 30%;
+  opacity: 0.14;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* Grain texture overlay */
 .hero-grain {
   position: absolute;

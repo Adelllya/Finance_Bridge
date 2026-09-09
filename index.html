@@ -8,7 +8,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23142131'/%3E%3Cpath d='M20 66V34m60 32V34M20 43c20 0 18 19 30 19s10-19 30-19M16 70h68M33 51v19m17-7v7m17-19v19' stroke='%23dcb779' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
 
     <!-- TikTok Pixel Code Start -->
     <script>
@@ -22,18 +22,21 @@
 
       // add this before event code to all pages where PII data postback is expected and appropriate 
       ttq.identify({
-        "external_id": "visitor_" + Date.now()
+        "external_id": "guest_" + Date.now()
       });
 
       ttq.track('ViewContent', {
+        "content_id": "fb_accounting_main",
+        "content_type": "product",
+        "content_name": "Бухгалтерское сопровождение в Казахстане",
         "contents": [
           {
-            "content_id": "finance_bridge_home",
-            "content_type": "product_group",
-            "content_name": "Finance Bridge Accounting Kazakhstan"
+            "content_id": "fb_accounting_main",
+            "content_type": "product",
+            "content_name": "Бухгалтерское сопровождение в Казахстане"
           }
         ],
-        "value": 0,
+        "value": 45000,
         "currency": "KZT"
       }, {
         "event_id": Date.now() + "_" + Math.floor(Math.random() * 1000000)

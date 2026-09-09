@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Globe2, Pause, Phone, Play, ShieldCheck, Sparkles } from "lucide-react";
 import { BRAND, PHONE_DISPLAY, igUrl, msgPlan, phoneUrl, waUrl } from "../data/content";
 import { useLanguage } from "../i18n";
 import { BridgeMark, ChatWidget, GoldDivider, IgIcon, WaIcon } from "./ui";
+import { trackClickButton, trackContact, trackLead, trackViewContent } from "../utils/tiktokPixel";
 import gulshatPhoto from "../assets/gulshat-new.png";
 import gulshatPortrait from "../assets/gulshat_portrait.png";
 import avatarViktor from "../assets/avatar_viktor.jpg";
@@ -120,9 +121,25 @@ export default function Landing() {
   const [name, setName] = useState("");
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(0);
 
+  useEffect(() => {
+    trackViewContent("fb_main_landing", "Бухгалтерское сопровождение ТОО и ИП в Казахстане", 45000, "KZT");
+  }, []);
+
   const activeTask = t.contacts.tasks[selectedTaskIndex] || t.contacts.tasks[0];
   const namePart = name.trim() ? `${t.contacts.introduction} ${name.trim()}.` : "";
   const quoteMessage = [t.contacts.greeting, namePart, activeTask.message].filter(Boolean).join(" ");
+
+  function scrollToConsultation(taskIndex?: number) {
+    if (typeof taskIndex === "number") {
+      setSelectedTaskIndex(taskIndex);
+    }
+    const target = document.getElementById("consultation");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+      const input = document.getElementById("quote-name");
+      if (input) input.focus({ preventScroll: true });
+    }
+  }
 
   return (
     <>
@@ -160,13 +177,25 @@ export default function Landing() {
               </div>
 
               <div className="hero-actions-block">
-                <a className="hero-btn hero-btn-primary" href="#services">
+                <a
+                  className="hero-btn hero-btn-primary"
+                  href="#services"
+                  onClick={() => trackClickButton("hero_services_btn", "Explore Services")}
+                >
                   <span className="btn-bg" />
                   <Sparkles style={{ width: 18, height: 18 }} />
                   <span>{t.more}</span>
                   <ArrowDown />
                 </a>
-                <a className="hero-btn hero-btn-ghost" href="#consultation">
+                <a
+                  className="hero-btn hero-btn-ghost"
+                  href="#consultation"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    trackClickButton("hero_quote_btn", "Get a Quote");
+                    scrollToConsultation();
+                  }}
+                >
                   <span>{t.calculate}</span>
                   <ArrowDown />
                 </a>
@@ -302,7 +331,15 @@ export default function Landing() {
               <h3>{t.services.problem}</h3>
               <p>{t.services.solution}</p>
             </div>
-            <a className="button button-outline" href="#consultation">
+            <a
+              className="button button-outline"
+              href="#consultation"
+              onClick={(e) => {
+                e.preventDefault();
+                trackClickButton("situation_discuss_btn", "Discuss Situation");
+                scrollToConsultation(2);
+              }}
+            >
               {t.services.action}
               <ArrowDown />
             </a>
@@ -542,6 +579,11 @@ export default function Landing() {
                 href={waUrl(quoteMessage)}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  trackLead("quote_calc_lead", activeTask.label, 45000, "KZT");
+                  trackContact("whatsapp", "consultation_quote");
+                  trackClickButton("quote_whatsapp_btn", "Get Quote WhatsApp");
+                }}
               >
                 <WaIcon />
                 <span>{t.contacts.quoteAction}</span>

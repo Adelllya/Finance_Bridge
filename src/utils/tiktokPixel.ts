@@ -257,6 +257,16 @@ export async function trackWhatsAppApplicationSubmit(params?: {
     value,
     currency
   );
+
+  // 6. Track CompleteRegistration
+  sendTrack(
+    "CompleteRegistration",
+    `reg_${taskId}`,
+    `Завершение оформления заявки (${taskLabel})`,
+    "product",
+    value,
+    currency
+  );
 }
 
 if (typeof window !== "undefined") {

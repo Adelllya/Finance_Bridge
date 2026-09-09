@@ -120,6 +120,7 @@ export default function Landing() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [name, setName] = useState("");
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     trackViewContent("fb_main_landing", "Бухгалтерское сопровождение ТОО и ИП в Казахстане", 45000, "KZT");
@@ -588,6 +589,7 @@ export default function Landing() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => {
+                  setSubmitted(true);
                   trackWhatsAppApplicationSubmit({
                     taskId: activeTask.id,
                     taskLabel: activeTask.label,
@@ -598,9 +600,34 @@ export default function Landing() {
                 }}
               >
                 <WaIcon />
-                <span>{t.contacts.quoteAction}</span>
+                <span>{submitted ? (language === "en" ? "Inquiry Sent to WhatsApp ✓" : "Заявка передана в WhatsApp ✓") : t.contacts.quoteAction}</span>
                 <ArrowRight />
               </a>
+
+              {submitted && (
+                <div
+                  style={{
+                    background: "rgba(53, 214, 139, 0.12)",
+                    border: "1px solid rgba(53, 214, 139, 0.35)",
+                    color: "#35d68b",
+                    padding: "12px 16px",
+                    borderRadius: "10px",
+                    fontSize: "0.88rem",
+                    marginTop: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    lineHeight: "1.4",
+                  }}
+                >
+                  <Check style={{ width: 18, height: 18, flexShrink: 0 }} />
+                  <span>
+                    {language === "en"
+                      ? "Inquiry prepared! WhatsApp is opening with your formatted message."
+                      : "Заявка готова! Диалог открывается в WhatsApp с готовым текстом."}
+                  </span>
+                </div>
+              )}
 
               <p className="quote-guarantee">
                 <span>⚡ {language === "en" ? "Reply within 15 minutes" : "Ответ за 15 минут в рабочее время"}</span>

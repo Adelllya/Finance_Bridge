@@ -20,15 +20,36 @@
       ttq.load('DAG5573C77U3EU7G6ULG');
       ttq.page();
 
+      function getSha256ExtId() {
+        try {
+          var k = 'tt_ext_id_v2';
+          var v = localStorage.getItem(k);
+          if (v && /^[a-f0-9]{64}$/.test(v)) return v;
+          var arr = new Uint8Array(32);
+          if (window.crypto && window.crypto.getRandomValues) {
+            window.crypto.getRandomValues(arr);
+          } else {
+            for (var i = 0; i < 32; i++) arr[i] = (Math.random() * 256) | 0;
+          }
+          var hex = '';
+          for (var j = 0; j < 32; j++) hex += ('0' + arr[j].toString(16)).slice(-2);
+          localStorage.setItem(k, hex);
+          return hex;
+        } catch (e) {
+          return 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+        }
+      }
+
+      var extId = getSha256ExtId();
+
       // add this before event code to all pages where PII data postback is expected and appropriate 
       ttq.identify({
-        "external_id": "guest_" + Date.now()
+        "external_id": extId
       });
 
+      var evtId = Date.now() + "_" + Math.floor(Math.random() * 1000000);
+
       ttq.track('ViewContent', {
-        "content_id": "fb_accounting_main",
-        "content_type": "product",
-        "content_name": "Бухгалтерское сопровождение в Казахстане",
         "contents": [
           {
             "content_id": "fb_accounting_main",
@@ -36,10 +57,13 @@
             "content_name": "Бухгалтерское сопровождение в Казахстане"
           }
         ],
+        "content_id": "fb_accounting_main",
+        "content_type": "product",
+        "content_name": "Бухгалтерское сопровождение в Казахстане",
         "value": 45000,
         "currency": "KZT"
       }, {
-        "event_id": Date.now() + "_" + Math.floor(Math.random() * 1000000)
+        "event_id": evtId
       });
     }(window, document, 'ttq');
     </script>

@@ -529,12 +529,28 @@ export default function Landing() {
               </div>
 
               <div className="contact-links">
-                <a className="contact-social" href={igUrl()} target="_blank" rel="noopener noreferrer">
+                <a
+                  className="contact-social"
+                  href={igUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    trackClickButton("contact_instagram_btn", "Instagram Profile");
+                    trackContact("instagram", "Instagram Profile");
+                  }}
+                >
                   <IgIcon />
                   <span>{t.contacts.instagram}<small>@gulshat_121985</small></span>
                   <ArrowUpRight />
                 </a>
-                <a className="contact-social" href={phoneUrl}>
+                <a
+                  className="contact-social"
+                  href={phoneUrl}
+                  onClick={() => {
+                    trackClickButton("contact_phone_btn", "Direct Phone Call");
+                    trackContact("phone", "Direct Phone Call");
+                  }}
+                >
                   <Phone />
                   <span>{PHONE_DISPLAY}<small>{t.contacts.call}</small></span>
                   <ArrowUpRight />

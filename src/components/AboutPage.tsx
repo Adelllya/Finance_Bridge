@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
 import { useLanguage } from "../i18n";
 import type { PageId } from "../data/content";
+import { trackClickButton } from "../utils/tiktokPixel";
 
 interface AboutPageProps {
   onNavigate: (page: PageId, taskParam?: string) => void;
@@ -130,7 +131,10 @@ export function AboutPage({ onNavigate }: AboutPageProps) {
           <button
             type="button"
             className="btn btn-primary"
-            onClick={() => onNavigate("calculator")}
+            onClick={() => {
+              trackClickButton("about_to_calc", "Go to Calculator from About");
+              onNavigate("calculator");
+            }}
           >
             <span>Перейти к калькулятору</span>
             <ArrowRight size={18} />

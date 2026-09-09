@@ -2,6 +2,7 @@ import { ArrowUp } from "lucide-react";
 import { BridgeMark, IgIcon, WaIcon } from "./ui";
 import { BRAND, igUrl, waUrl, type PageId } from "../data/content";
 import { useLanguage } from "../i18n";
+import { trackContact } from "../utils/tiktokPixel";
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -62,6 +63,9 @@ export function Footer({ onNavigate }: FooterProps) {
                 color: "var(--gold)",
                 padding: "8px 14px",
               }}
+              onClick={() => {
+                trackContact("whatsapp", "footer_link");
+              }}
             >
               <WaIcon style={{ width: 16, height: 16 }} />
               <span>WhatsApp</span>
@@ -78,6 +82,9 @@ export function Footer({ onNavigate }: FooterProps) {
                 background: "rgba(255,255,255,0.06)",
                 color: "#cbd5e1",
                 padding: "8px 14px",
+              }}
+              onClick={() => {
+                trackContact("instagram", "footer_link");
               }}
             >
               <IgIcon style={{ width: 16, height: 16 }} />

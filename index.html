@@ -19,6 +19,25 @@
 
       ttq.load('DAG5573C77U3EU7G6ULG');
       ttq.page();
+
+      // add this before event code to all pages where PII data postback is expected and appropriate 
+      ttq.identify({
+        "external_id": "visitor_" + Date.now()
+      });
+
+      ttq.track('ViewContent', {
+        "contents": [
+          {
+            "content_id": "finance_bridge_home",
+            "content_type": "product_group",
+            "content_name": "Finance Bridge Accounting Kazakhstan"
+          }
+        ],
+        "value": 0,
+        "currency": "KZT"
+      }, {
+        "event_id": Date.now() + "_" + Math.floor(Math.random() * 1000000)
+      });
     }(window, document, 'ttq');
     </script>
     <!-- TikTok Pixel Code End -->

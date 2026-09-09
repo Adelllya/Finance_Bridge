@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { useLanguage } from "../i18n";
 import type { PageId } from "../data/content";
+import { trackClickButton } from "../utils/tiktokPixel";
 
 interface ServicesPageProps {
   onNavigate: (page: PageId, taskParam?: string) => void;
@@ -42,7 +43,10 @@ export function ServicesPage({ onNavigate }: ServicesPageProps) {
                     type="button"
                     className="btn btn-primary"
                     style={{ alignSelf: "flex-start", marginTop: "auto" }}
-                    onClick={() => onNavigate("calculator", service.id)}
+                    onClick={() => {
+                      trackClickButton(`service_${service.id}`, `Calculate: ${service.title}`);
+                      onNavigate("calculator", service.id);
+                    }}
                   >
                     <span>{t.services.ctaCalculate}</span>
                     <ArrowRight size={17} />

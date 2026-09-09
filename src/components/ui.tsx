@@ -3,6 +3,7 @@ import { ArrowUpRight, MessageCircle, Phone, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import { waUrl, igUrl, phoneUrl } from "../data/content";
 import { useLanguage } from "../i18n";
+import { trackContact, trackWhatsAppApplicationSubmit } from "../utils/tiktokPixel";
 
 export function BridgeMark({ className }: { className?: string }) {
   return (
@@ -99,9 +100,40 @@ export function ChatWidget({ avatarSrc }: { avatarSrc: string }) {
         </div>
         <h2>{t.widget.title}</h2>
         <p>{t.widget.subtitle}</p>
-        <a className="contact-option whatsapp-option" href={waUrl(t.message)} target="_blank" rel="noopener noreferrer"><WaIcon /> WhatsApp <ArrowUpRight /></a>
-        <a className="contact-option" href={igUrl()} target="_blank" rel="noopener noreferrer"><IgIcon /> Instagram <ArrowUpRight /></a>
-        <a className="contact-option" href={phoneUrl}><Phone />{t.widget.call}<ArrowUpRight /></a>
+        <a
+          className="contact-option whatsapp-option"
+          href={waUrl(t.message)}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            trackWhatsAppApplicationSubmit({
+              taskId: "widget_whatsapp",
+              taskLabel: "Чат-виджет WhatsApp",
+            });
+          }}
+        >
+          <WaIcon /> WhatsApp <ArrowUpRight />
+        </a>
+        <a
+          className="contact-option"
+          href={igUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            trackContact("instagram", "widget_instagram");
+          }}
+        >
+          <IgIcon /> Instagram <ArrowUpRight />
+        </a>
+        <a
+          className="contact-option"
+          href={phoneUrl}
+          onClick={() => {
+            trackContact("phone", "widget_phone");
+          }}
+        >
+          <Phone />{t.widget.call}<ArrowUpRight />
+        </a>
         <p className="small-print">{t.widget.note}</p>
       </div>
       <button ref={trigger} type="button" className="contact-trigger" aria-expanded={open} aria-controls="contact-panel" aria-label={open ? t.widget.close : t.widget.open} onClick={() => setOpen(!open)}>

@@ -3,7 +3,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, Globe2, Pause,
 import { BRAND, PHONE_DISPLAY, igUrl, msgPlan, phoneUrl, waUrl } from "../data/content";
 import { useLanguage } from "../i18n";
 import { BridgeMark, ChatWidget, GoldDivider, IgIcon, WaIcon } from "./ui";
-import { trackClickButton, trackContact, trackLead, trackViewContent } from "../utils/tiktokPixel";
+import { trackClickButton, trackContact, trackLead, trackViewContent, trackWhatsAppApplicationSubmit } from "../utils/tiktokPixel";
 import gulshatPhoto from "../assets/gulshat-new.png";
 import gulshatPortrait from "../assets/gulshat_portrait.png";
 import avatarViktor from "../assets/avatar_viktor.jpg";
@@ -420,6 +420,14 @@ export default function Landing() {
                   href={waUrl(msgPlan(planName, language))}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => {
+                    trackWhatsAppApplicationSubmit({
+                      taskId: `plan_${planName.toLowerCase().replace(/\s+/g, "_")}`,
+                      taskLabel: `Тариф ${planName}`,
+                      value: 45000,
+                      currency: "KZT",
+                    });
+                  }}
                 >
                   {t.calculate}
                   <ArrowUpRight />
@@ -580,9 +588,13 @@ export default function Landing() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => {
-                  trackLead("quote_calc_lead", activeTask.label, 45000, "KZT");
-                  trackContact("whatsapp", "consultation_quote");
-                  trackClickButton("quote_whatsapp_btn", "Get Quote WhatsApp");
+                  trackWhatsAppApplicationSubmit({
+                    taskId: activeTask.id,
+                    taskLabel: activeTask.label,
+                    customerName: name.trim() || undefined,
+                    value: 45000,
+                    currency: "KZT",
+                  });
                 }}
               >
                 <WaIcon />

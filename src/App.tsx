@@ -4,7 +4,7 @@ import Landing from "./components/Landing";
 import { BridgeMark, WaIcon } from "./components/ui";
 import { BRAND, waUrl } from "./data/content";
 import { LanguageProvider, useLanguage } from "./i18n";
-import { trackContact } from "./utils/tiktokPixel";
+import { trackContact, trackWhatsAppApplicationSubmit } from "./utils/tiktokPixel";
 
 function Website() {
   const { language, setLanguage, t } = useLanguage();
@@ -58,7 +58,10 @@ function Website() {
               rel="noopener noreferrer"
               aria-label="WhatsApp"
               onClick={() => {
-                trackContact("whatsapp", "header_top_button");
+                trackWhatsAppApplicationSubmit({
+                  taskId: "header_whatsapp",
+                  taskLabel: "Кнопка WhatsApp в шапке",
+                });
               }}
             >
               <WaIcon />

@@ -15,6 +15,15 @@ declare global {
       ) => void;
       page: () => void;
     };
+    ttqTrackWhatsAppSubmit?: (params?: {
+      taskId?: string;
+      taskLabel?: string;
+      customerName?: string;
+      customerPhone?: string;
+      customerEmail?: string;
+      value?: number;
+      currency?: string;
+    }) => Promise<void>;
   }
 }
 
@@ -33,7 +42,7 @@ export async function sha256(input: string): Promise<string> {
   const clean = input.trim().toLowerCase();
   if (!clean) return "";
   try {
-    if (window.crypto && window.crypto.subtle) {
+    if (typeof window !== "undefined" && window.crypto && window.crypto.subtle) {
       const encoder = new TextEncoder();
       const data = encoder.encode(clean);
       const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
@@ -92,7 +101,7 @@ export async function ttqIdentify(pii?: PiiData) {
 /**
  * Standardized event dispatcher ensuring both top-level content_id and contents array are present
  */
-function sendTrack(
+export function sendTrack(
   eventName: string,
   contentId: string,
   contentName: string,
@@ -178,6 +187,78 @@ export async function trackLead(
 ) {
   await ttqIdentify(pii);
   sendTrack("Lead", contentId, contentName, "product", value, currency);
-  // Also send SubmitForm to satisfy all TikTok funnel requirements
   sendTrack("SubmitForm", contentId, contentName, "product", value, currency);
+}
+
+/**
+ * Executes full tracking suite under WhatsApp application submission:
+ * 1. ttq.identify with SHA-256 hashed values
+ * 2. ttq.track('ClickButton')
+ * 3. ttq.track('Contact')
+ * 4. ttq.track('Lead')
+ * 5. ttq.track('SubmitForm')
+ */
+export async function trackWhatsAppApplicationSubmit(params?: {
+  taskId?: string;
+  taskLabel?: string;
+  customerName?: string;
+  customerPhone?: string;
+  customerEmail?: string;
+  value?: number;
+  currency?: string;
+}) {
+  const taskId = params?.taskId || "accounting_inquiry";
+  const taskLabel = params?.taskLabel || "Бухгалтерское сопровождение";
+  const value = params?.value ?? 45000;
+  const currency = params?.currency ?? "KZT";
+
+  // 1. Identify with SHA-256 hashed customer PII
+  await ttqIdentify({
+    phone_number: params?.customerPhone,
+    email: params?.customerEmail,
+  });
+
+  // 2. Track ClickButton
+  sendTrack(
+    "ClickButton",
+    `whatsapp_submit_${taskId}`,
+    `Подача заявки в WhatsApp: ${taskLabel}`,
+    "product",
+    value,
+    currency
+  );
+
+  // 3. Track Contact
+  sendTrack(
+    "Contact",
+    "contact_whatsapp_lead",
+    `Прямой диалог с главбухом в WhatsApp (${taskLabel})`,
+    "product",
+    value,
+    currency
+  );
+
+  // 4. Track Lead
+  sendTrack(
+    "Lead",
+    `lead_${taskId}`,
+    `Заявка на расчёт бухгалтерии (${taskLabel})`,
+    "product",
+    value,
+    currency
+  );
+
+  // 5. Track SubmitForm
+  sendTrack(
+    "SubmitForm",
+    `submit_${taskId}`,
+    `Отправка формы заявки в WhatsApp (${taskLabel})`,
+    "product",
+    value,
+    currency
+  );
+}
+
+if (typeof window !== "undefined") {
+  window.ttqTrackWhatsAppSubmit = trackWhatsAppApplicationSubmit;
 }
